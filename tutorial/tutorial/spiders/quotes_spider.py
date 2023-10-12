@@ -10,7 +10,7 @@ class QuotesSpider(scrapy.Spider):
         urls = [
             "https://quotes.toscrape.com/page/1/",
         ]
-        
+
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -24,5 +24,4 @@ class QuotesSpider(scrapy.Spider):
 
         next_page = response.css("li.next a::attr(href)").get()
         if next_page is not None:
-            next_page = response.urljoin(next_page)
-            yield scrapy.Request(next_page, callback=self.parse)
+            yield response.follow(next_page, callback=self.parse)
