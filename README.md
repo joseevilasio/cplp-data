@@ -1,6 +1,18 @@
-# scraping
+# Estudos de Web Scraping
 
-Projeto de portfolio - Parte II
+Utilizando as seguintes ferramentas:
+- Python
+- Selenium
+- Pandas
+- Scrapy
+
+## Primeiro Projeto - Estatuto de Igualdade
+
+1) Fazer um web scraping da página do diário de Portugal e coletar arquivos em PDF dos estatutos concedidos a brasileiros;
+2) Retirar as informações desses PDFs de forma nominal a quem foi concedido, data, decreto;
+3) Tirar insights a partir do dados.
+
+## Segundo Projeto - Dados de Varejistas
 
 1) Pegue o site de alguma varejista, pode ser a Leroy Merlin por exemplo
 2) Crie um código em Python para extrair dados dos produtos do site. Eu quero saber o nome do produto, departamento e preço
