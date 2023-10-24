@@ -1,23 +1,22 @@
 from selenium import webdriver  
-from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.common.by import By
 from time import sleep
 import os
+from datetime import datetime
+import pandas as pd
+from urllib import request
 
-# options = Options()
-# options.add_argument("window-size=400,800")
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-path_download = "".join([HERE, "/assets"])
-
+here = os.path.dirname(os.path.abspath(__file__))
+path_download = "".join([here, "/assets/raw_pdf"])
 
 options = webdriver.FirefoxOptions()
 
-# Exemplo de configuração de opções:
-options.set_preference("browser.download.folderList", 2)
-options.set_preference("browser.download.manager.showWhenStarting",False)
-options.set_preference("browser.download.dir", path_download)
-options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
+# options.set_preference("browser.download.folderList", 2)
+# options.set_preference("browser.download.manager.showWhenStarting",False)
+# options.set_preference("browser.download.dir", path_download)
+# options.set_preference("pdfjs.disabled", True)
+options.set_preference("headless", True)
 
 browser = webdriver.Firefox(options=options)
 
@@ -48,16 +47,20 @@ checkbox_serie[4].click()
 
 sleep(2)
 
+#TODO: Configurar para ter 200 resultados na pagina e avançar para próxima paginas
+#TODO: Filtar datas
+#TODO: Ordenar resultado de pesquisa
+
 body_results = browser.find_element(By.ID, "ListaResultados")
 list_href = body_results.find_elements(By.CLASS_NAME, "title")
 
 infor = {
-    "index": [],
-    "date_save": [],
-    "item": [],
-    "link_page": [],
-    "link_pdf": [],
-    "name_pdf": []
+    "index": [], #index
+    "date_save": [], #saves date when the download
+    "item": [], #description
+    "link_page": [], #link page decreto
+    "link_pdf": [], #link page file download
+    "name_pdf": [] #name pdf file
 }
 
 index = 0
@@ -72,22 +75,37 @@ for item in list_href:
     index += 1
 
 
-browser.get(f"{infor['link_page'][0]}")
+# TODO: Concluir coleta de dados de link das paginas fazer for em cima de dict com as informações
 
-sleep(3)
+for item in infor["link_page"]:
 
-download = browser.find_elements(By.CLASS_NAME, "ThemeGrid_MarginGutter")
-download_link_pdf = download[-1].get_attribute("href")
+    print(f"Abrir pagina {item} - >")
 
-parser_pdf_name = download_link_pdf.split("/")[-1]
-print(parser_pdf_name)
+    browser.get(f"{item}")
 
-browser.get(download_link_pdf)
+    print("Aberta!")
 
-sleep(1)
+    sleep(3)
 
-button_save = browser.find_element(By.ID, "download")
-button_save.click()
-# print(infor)
+    download = browser.find_elements(By.CLASS_NAME, "ThemeGrid_MarginGutter")
+    download_link_pdf = download[-1].get_attribute("href")
 
-# browser.quit()
+    parser_pdf_name = download_link_pdf.split("/")[-1]   
+
+    request.urlretrieve(download_link_pdf, "".join([path_download, f"/{parser_pdf_name}"]))
+
+    sleep(2)    
+
+    infor["date_save"] = datetime.now()
+    infor["name_pdf"] = parser_pdf_name
+    infor["link_pdf"] = download_link_pdf
+
+    print("Finalizado! - > Proximo")
+
+    sleep(1)
+
+
+data = pd.DataFrame(infor)
+data.to_excel("/assets/data_scraping_raw.xlsx", index=False)
+
+browser.quit()
