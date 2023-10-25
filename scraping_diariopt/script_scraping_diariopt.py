@@ -6,44 +6,45 @@ from datetime import datetime
 import pandas as pd
 from urllib import request
 
-
+# Path
 here = os.path.dirname(os.path.abspath(__file__))
-path_download = "".join([here, "/assets/raw_pdf"])
+raw_path = "".join([here, "/assets/raw_pdf"])
 
+# Config webdriver
 options = webdriver.FirefoxOptions()
-
-# options.set_preference("browser.download.folderList", 2)
-# options.set_preference("browser.download.manager.showWhenStarting",False)
-# options.set_preference("browser.download.dir", path_download)
-# options.set_preference("pdfjs.disabled", True)
 options.set_preference("headless", True)
 
+# Instance
 browser = webdriver.Firefox(options=options)
 
+# Get initial
 browser.get("https://diariodarepublica.pt/dr/home")
 
 sleep(3)
 
-input_place = browser.find_element(By.TAG_NAME, "input")
-input_place.send_keys("Concede o estatuto de igualdade de direitos e deveres a vários cidadãos brasileiros")
+# Search
+text_for_research = "Concede o estatuto de igualdade de direitos e deveres a vários cidadãos brasileiros"
+input_place = browser.find_element(By.TAG_NAME, "input") # Find the search box
+input_place.send_keys(text_for_research) # Insert text
 
-buttom_search = browser.find_element(By.ID, "b2-b2-myButton2")
-buttom_search.click()
-
-sleep(3)
-
-checkbox_legislacao = browser.find_elements(By.CLASS_NAME, "checkbox")
-checkbox_legislacao[1].click()
+buttom_search = browser.find_element(By.ID, "b2-b2-myButton2") # Find the buttom submit
+buttom_search.click() # Submit
 
 sleep(3)
 
-checkbox_serie_plus = browser.find_element(By.XPATH, "//*[@id='Serie_Titulo']/div[1]/span")
+# Search filter
+checkbox_legislacao = browser.find_elements(By.CLASS_NAME, "checkbox") # Find the checkbox 'Legislação'
+checkbox_legislacao[1].click() # Check
+
+sleep(3)
+
+checkbox_serie_plus = browser.find_element(By.XPATH, "//*[@id='Serie_Titulo']/div[1]/span") # Find area to expand option 'Série'
 checkbox_serie_plus.click()
 
-sleep(0.5)
+sleep(2)
 
-checkbox_serie = browser.find_elements(By.CLASS_NAME, "checkbox")
-checkbox_serie[4].click()
+checkbox_serie = browser.find_elements(By.CLASS_NAME, "checkbox") # Find the checkbox 'Série I'
+checkbox_serie[4].click() # Check
 
 sleep(2)
 
@@ -51,61 +52,43 @@ sleep(2)
 #TODO: Filtar datas
 #TODO: Ordenar resultado de pesquisa
 
-body_results = browser.find_element(By.ID, "ListaResultados")
-list_href = body_results.find_elements(By.CLASS_NAME, "title")
 
-infor = {
-    "index": [], #index
-    "date_save": [], #saves date when the download
-    "item": [], #description
-    "link_page": [], #link page decreto
+# Data extraction
+body_results = browser.find_element(By.ID, "ListaResultados") # Find data
+list_href_page = body_results.find_elements(By.CLASS_NAME, "title") # Find element in data (create list)
+
+data = {        
+    "description": [], #description
+    "link_page": [], #link page 'despacho'
     "link_pdf": [], #link page file download
     "name_pdf": [] #name pdf file
 }
 
-index = 0
+for item_href in list_href_page:
 
-for item in list_href:
-    link = item.get_attribute("href")
-    text = item.find_element(By.CSS_SELECTOR, "span").text
+    link_page = item_href.get_attribute("href") # Link for page 'despacho'
+    text_page = item_href.find_element(By.CSS_SELECTOR, "span").text # Extraction text 'despacho'
 
-    infor["item"].append(text)
-    infor["link_page"].append(link)
-    infor["index"].append(index)
-    index += 1
+    data["description"].append(text_page)
+    data["link_page"].append(link_page)
 
+for link in data["link_page"]:
 
-# TODO: Concluir coleta de dados de link das paginas fazer for em cima de dict com as informações
-
-for item in infor["link_page"]:
-
-    print(f"Abrir pagina {item} - >")
-
-    browser.get(f"{item}")
-
-    print("Aberta!")
+    # Get link page 'despacho'
+    browser.get(f"{link}")
 
     sleep(3)
 
-    download = browser.find_elements(By.CLASS_NAME, "ThemeGrid_MarginGutter")
-    download_link_pdf = download[-1].get_attribute("href")
+    list_elements_page_download = browser.find_elements(By.CLASS_NAME, "ThemeGrid_MarginGutter") # List of elements in page
+    download_link_pdf = list_elements_page_download[-1].get_attribute("href") # Extraction link file pdf
+    parser_name_pdf = download_link_pdf.split("/")[-1] # Parser link file pdf to pdf name
 
-    parser_pdf_name = download_link_pdf.split("/")[-1]   
-
-    request.urlretrieve(download_link_pdf, "".join([path_download, f"/{parser_pdf_name}"]))
-
-    sleep(2)    
-
-    infor["date_save"] = datetime.now()
-    infor["name_pdf"] = parser_pdf_name
-    infor["link_pdf"] = download_link_pdf
-
-    print("Finalizado! - > Proximo")
-
-    sleep(1)
-
-
-data = pd.DataFrame(infor)
-data.to_excel("/assets/data_scraping_raw.xlsx", index=False)
-
+    data["link_pdf"].append(download_link_pdf)
+    data["name_pdf"].append(parser_name_pdf)
+ 
+# Close webdriver
 browser.quit()
+
+# Export data for spreadsheet
+data_for_spreadsheet = pd.DataFrame(data)
+data_for_spreadsheet.to_excel("".join([raw_path, "/data_scraping_raw.xlsx"]), index=False)
