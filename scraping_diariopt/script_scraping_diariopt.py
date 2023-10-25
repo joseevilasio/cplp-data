@@ -2,9 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from time import sleep
 import os
-from datetime import datetime
 import pandas as pd
-from urllib import request
+
 
 # Path
 here = os.path.dirname(os.path.abspath(__file__))
@@ -90,5 +89,5 @@ for link in data["link_page"]:
 browser.quit()
 
 # Export data for spreadsheet
-data_for_spreadsheet = pd.DataFrame(data)
-data_for_spreadsheet.to_excel("".join([raw_path, "/data_scraping_raw.xlsx"]), index=False)
+data_for_csv = pd.DataFrame(data)
+data_for_csv.to_csv("".join([raw_path, "/data_scraping_raw.csv"]), sep=";", index=False)
