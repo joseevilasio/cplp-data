@@ -48,15 +48,23 @@ sleep(2)
 
 checkbox_serie = browser.find_elements(
     By.CLASS_NAME, "checkbox"
-)  # Find the checkbox 'Série I'
+)  # Find the checkbox 'Série II'
 checkbox_serie[4].click()  # Check
 
 sleep(2)
 
-# TODO: Configurar para ter 200 resultados na pagina e avançar para próxima paginas
-# TODO: Filtar datas
-# TODO: Ordenar resultado de pesquisa
+# Filter date
+date_published = browser.find_element(By.ID, "Input_dataPublicacaoDe") # Find box filter date
+date_published.send_keys("2023-10-01") # Insert date fmt AAAA-MM-DD
+exit_calendar = browser.find_element(By.XPATH, "//*[@id='FiltrarResultados']/div[1]/span").click()
+date_published_submit = browser.find_element(By.XPATH, "//*[@id='Pesquisa2']/div[3]/button/span")
+date_published_submit.click()
 
+sleep(2)
+
+# Expand results 200
+expand_list = browser.find_element(By.XPATH, "//*[@id='ResultadosEncontrados']/div[2]/div[2]/div/div/span").click()
+select_200_items = browser.find_element(By.XPATH, "//*[@id='transitionContainer']/div/div[2]/div/div/div[3]/a/span").click()
 
 # Data extraction
 body_results = browser.find_element(By.ID, "ListaResultados")  # Find data
