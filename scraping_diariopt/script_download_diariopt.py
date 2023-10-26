@@ -26,7 +26,6 @@ def download_pdf(url: str, path: str) -> bool:
         print("Fail download")
         return False
 
-
     response.release_conn()
     print(f"Download Done -> {path_pdf}")
     return True
@@ -36,15 +35,14 @@ def download_pdf(url: str, path: str) -> bool:
 here = os.path.dirname(os.path.abspath(__file__))
 raw_path = "".join([here, "/assets/raw_pdf"])
 
-data_download = {        
-    "date_save_pdf": [], # Date when save pdf
-    "pdf_ok": [], # If the pdf has been saved (True or False)
+data_download = {
+    "date_save_pdf": [],  # Date when save pdf
+    "pdf_ok": [],  # If the pdf has been saved (True or False)
 }
 
 data_links = pd.read_csv("".join([raw_path, "/data_scraping_raw.csv"]), sep=";")
 
 for index in range(len(data_links)):
-
     link_pdf = data_links.link_pdf[index]
     name_pdf = data_links.name_pdf[index]
     path_pdf = "".join([raw_path, f"/{name_pdf}"])
@@ -53,10 +51,9 @@ for index in range(len(data_links)):
         result = True
 
     else:
-        result = download_pdf(url=link_pdf, path=path_pdf)    
-    
+        result = download_pdf(url=link_pdf, path=path_pdf)
+
     data_download["date_save_pdf"].append(datetime.now().strftime("%d/%m/%Y %H:%M"))
-    
     data_download["pdf_ok"].append(result)
 
 
@@ -64,5 +61,6 @@ data_download = pd.DataFrame(data_download)
 
 # Concat data download and data infor links
 data_complete = pd.concat([data_links, data_download], axis=1)
-
-print(data_complete.head())
+data_complete.to_csv(
+    "".join([raw_path, "/data_scraping_raw_complete.csv"]), sep=";", index=False
+)
