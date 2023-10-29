@@ -13,7 +13,7 @@ def download_pdf(url: str, path: str) -> bool:
     response = http.request("GET", url, preload_content=False)
     content_type = response.headers["content-type"]
 
-    print(f"Get -> {url}\n")
+    print(f"Get -> {url}")
 
     sleep(2)
 
@@ -27,7 +27,7 @@ def download_pdf(url: str, path: str) -> bool:
         return False
 
     response.release_conn()
-    print(f"Download Done -> {path_pdf}")
+    print(f"Download Done -> {path_pdf}\n")
     return True
 
 

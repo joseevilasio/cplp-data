@@ -133,7 +133,7 @@ for link in data["link_page"]:
     data["name_pdf"].append(parser_name_pdf)
 
 # Close webdriver
-# browser.quit()
+browser.quit()
 
 # Export data for spreadsheet
 data_for_csv = pd.DataFrame(data)
