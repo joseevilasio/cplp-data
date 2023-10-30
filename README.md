@@ -5,6 +5,7 @@ Utilizando as seguintes ferramentas:
 - Selenium
 - Pandas
 - Scrapy
+- PyPDF2
 
 ## Primeiro Projeto - Estatuto de Igualdade
 
