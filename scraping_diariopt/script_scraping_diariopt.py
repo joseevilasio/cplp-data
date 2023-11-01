@@ -4,11 +4,23 @@ from time import sleep
 import os
 import math
 import pandas as pd
-
+import re
 
 # Path
 here = os.path.dirname(os.path.abspath(__file__))
 raw_path = "".join([here, "/assets/raw_pdf"])
+
+
+def create_pdf_name(text: str) -> str:
+    """transforms the description into a name for pdf file"""
+
+    pattern = r"(\b\d{3,5}/\d{4}\b)"
+    list_re = re.split(pattern, text)
+    pdf_name = "".join(["despacho_", list_re[1], "_dr_", list_re[3], ".pdf"])
+    pdf_name = pdf_name.replace("/", "-")
+
+    return pdf_name
+
 
 # Dict model data
 data = {
@@ -64,7 +76,7 @@ sleep(2)
 
 # Filter date
 date_published = browser.find_element(By.ID, "Input_dataPublicacaoDe") # Find box filter date
-date_published.send_keys("2020-01-01") # Insert date fmt AAAA-MM-DD
+date_published.send_keys("2023-06-01") # Insert date fmt AAAA-MM-DD
 exit_calendar = browser.find_element(By.XPATH, "//*[@id='FiltrarResultados']/div[1]/span").click()
 date_published_submit = browser.find_element(By.XPATH, "//*[@id='Pesquisa2']/div[3]/button/span")
 date_published_submit.click()
@@ -101,9 +113,11 @@ for page in range(total_pages):
         text_page = item_href.find_element(
             By.CSS_SELECTOR, "span"
         ).text  # Extraction text 'despacho'
+        name_pdf = create_pdf_name(text_page)
 
         data["description"].append(text_page)
         data["link_page"].append(link_page)
+        data["name_pdf"].append(name_pdf)
 
     i -= 1 # countdown
 
@@ -125,12 +139,8 @@ for link in data["link_page"]:
     download_link_pdf = list_elements_page_download[-1].get_attribute(
         "href"
     )  # Extraction link file pdf
-    parser_name_pdf = download_link_pdf.split("/")[
-        -1
-    ]  # Parser link file pdf to pdf name
 
     data["link_pdf"].append(download_link_pdf)
-    data["name_pdf"].append(parser_name_pdf)
 
 # Close webdriver
 browser.quit()
