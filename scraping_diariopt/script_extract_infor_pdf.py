@@ -4,6 +4,26 @@ import pandas as pd
 import os
 
 
+def remove_space_between_digit(text: str) -> str:
+    """Removes spaces between digits, before and after."""
+
+    numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    i = 0
+    text_compile = []
+
+    for character in text:        
+        if character == " " and text[i - 1] in numbers:
+            pass        
+        elif character == " " and text[i + 1] in numbers:
+            pass        
+        else:
+            text_compile.append(character)
+        i += 1    
+    result = "".join(text_compile)
+
+    return result
+
+
 def extract_text_pdf(file) -> list:
     """Extract name and date of birth from PDF"""
 
@@ -26,11 +46,13 @@ def extract_text_pdf(file) -> list:
         amount_word_initial_point = len(word_initial_point)
         index_initial = text.find(word_initial_point) + amount_word_initial_point
 
-        extract_infor = text[index_initial:] # information after index initial       
+        extract_infor = text[index_initial:] # information after index initial
+        extract_infor = remove_space_between_digit(extract_infor)
 
         list_infor_split = re.split(pattern_date, extract_infor) # regex split with pattern date
 
-        print(f"{file}")
+        print(f"Extract start -> page: {number + 1} path: {file}")
+
         for item in list_infor_split:
             if re.search(pattern_name, item):
                 name.append(item.strip())
@@ -85,13 +107,13 @@ for index in range(len(data_scraping_complete)):
         data["link_page"].append(link_page)
 
 
-data_extract = pd.DataFrame(data)
-data_extract.to_csv(
-    "".join([processed_data, "/processed_data_extract.csv"]), sep=";", index=False
-)
+# data_extract = pd.DataFrame(data)
+# data_extract.to_csv(
+#     "".join([processed_data, "/processed_data_extract.csv"]), sep=";", index=False
+# )
 
-# print(len(data["extract_complete"]))
-# print(len(data["birth_date"]))
-# print(len(data["description"]))
-# print(len(data["link_page"]))
-# print(len(data["name"]))
+print(len(data["extract_complete"]))
+print(len(data["birth_date"]))
+print(len(data["description"]))
+print(len(data["link_page"]))
+print(len(data["name"]))
