@@ -2,6 +2,7 @@ from PyPDF2 import PdfReader
 import re
 import pandas as pd
 import os
+from datetime import datetime
 
 
 def remove_space_between_digit(text: str) -> str:
@@ -24,6 +25,21 @@ def remove_space_between_digit(text: str) -> str:
     return result
 
 
+def if_age_is_valid(date: str) -> bool:
+    """Comparing dates to check if you are of legal age"""    
+
+    converted_date = datetime.strptime(date, "%d/%m/%Y").date()
+    today = datetime.now().strftime("%d/%m/%Y")
+    converted__today = datetime.strptime(today, "%d/%m/%Y").date()
+    
+    age = converted__today.year - converted_date.year
+
+    if age >= 18:
+        return True
+    else:
+        return False
+    
+
 def extract_text_pdf(file) -> list:
     """Extract name and date of birth from PDF"""
 
@@ -44,10 +60,11 @@ def extract_text_pdf(file) -> list:
         word_initial_point = "nascimento" # starting point for cutting
 
         amount_word_initial_point = len(word_initial_point)
-        index_initial = text.find(word_initial_point) + amount_word_initial_point
+        index_initial = text.lower().find(word_initial_point) + amount_word_initial_point
 
         extract_infor = text[index_initial:] # information after index initial
         extract_infor = remove_space_between_digit(extract_infor)
+        extract_infor = extract_infor.replace("-", "/")
 
         list_infor_split = re.split(pattern_date, extract_infor) # regex split with pattern date
 
@@ -57,9 +74,9 @@ def extract_text_pdf(file) -> list:
             if re.search(pattern_name, item):
                 name.append(item.strip())
                 print(f"Name: {item.strip()} --- ", end="")
-            elif re.search(pattern_date, item):
-                birth_date.append(item.replace(" ", ""))
-                print(f"Date: {item.strip()}")
+            elif re.search(pattern_date, item) and if_age_is_valid(item):
+                birth_date.append(item)
+                print(f"Date: {item}")
             
 
     return name, birth_date
@@ -107,13 +124,14 @@ for index in range(len(data_scraping_complete)):
         data["link_page"].append(link_page)
 
 
-# data_extract = pd.DataFrame(data)
-# data_extract.to_csv(
-#     "".join([processed_data, "/processed_data_extract.csv"]), sep=";", index=False
-# )
+data_extract = pd.DataFrame(data)
+data_extract.to_csv(
+    "".join([processed_data, "/processed_data_extract.csv"]), sep=";", index=False
+)
 
 print(len(data["extract_complete"]))
 print(len(data["birth_date"]))
 print(len(data["description"]))
 print(len(data["link_page"]))
 print(len(data["name"]))
+
