@@ -1,16 +1,53 @@
 [tool.poetry]
-name = "cplp data"
+name = "cplpdata"
 version = "0.1.0"
 description = "Compile information about CPLP"
 authors = ["joseevilasio <jose_evilasio@outlook.com>"]
 license = "MIT License"
 readme = "README.md"
 
+
+[tool.flake8]
+exclude = [".venv", "build", ".vscodelocal", "migrations", "./test.py"]
+max-line-length = 79
+# extend-ignore = "W293,"
+
+
+[tool.black]
+line-length = 79
+target-version = ["py36", "py37", "py39", "py310"]
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.venv
+  | _build
+  | build
+  | dist
+  | migrations
+)/
+'''
+
+
+[tool.isort]
+profile = "black"
+src_paths = ["app"]
+multi_line_output = 3  # VHI
+line_length = 79
+force_grid_wrap = 0
+use_parentheses = true
+include_trailing_comma = true
+
+
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
 pandas = "^2.1.2"
-pypdf2 = "^3.0.1"
+pypdf2 = {extras = ["full"], version = "^3.0.1"}
 selenium = "^4.15.1"
+flake8 = "^6.1.0"
+isort = "^5.12.0"
+black = "^23.10.1"
+typer = {extras = ["full"], version = "^0.9.0"}
 
 
 [build-system]
