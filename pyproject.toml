@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "cplp data"
+version = "0.1.0"
+description = "Compile information about CPLP"
+authors = ["joseevilasio <jose_evilasio@outlook.com>"]
+license = "MIT License"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+pandas = "^2.1.2"
+pypdf2 = "^3.0.1"
+selenium = "^4.15.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
