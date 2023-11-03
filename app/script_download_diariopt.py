@@ -1,8 +1,10 @@
-import urllib3
-from datetime import datetime
 import os
-import pandas as pd
+from datetime import datetime
 from time import sleep
+
+import pandas as pd
+import urllib3
+
 from utils import RAW_PATH
 
 
@@ -37,7 +39,9 @@ data_download = {
     "pdf_ok": [],  # If the pdf has been saved (True or False)
 }
 
-data_links = pd.read_csv("".join([RAW_PATH, "/data_scraping_raw.csv"]), sep=";")
+data_links = pd.read_csv(
+    "".join([RAW_PATH, "/data_scraping_raw.csv"]), sep=";"
+)
 
 for index in range(len(data_links)):
     link_pdf = data_links.link_pdf[index]
@@ -50,7 +54,9 @@ for index in range(len(data_links)):
     else:
         result = download_pdf(url=link_pdf, path=path_pdf)
 
-    data_download["date_save_pdf"].append(datetime.now().strftime("%d/%m/%Y %H:%M"))
+    data_download["date_save_pdf"].append(
+        datetime.now().strftime("%d/%m/%Y %H:%M")
+    )
     data_download["pdf_ok"].append(result)
 
 
@@ -59,5 +65,7 @@ data_download = pd.DataFrame(data_download)
 # Concat data download and data infor links
 data_complete = pd.concat([data_links, data_download], axis=1)
 data_complete.to_csv(
-    "".join([RAW_PATH, "/data_scraping_raw_complete.csv"]), sep=";", index=False
+    "".join([RAW_PATH, "/data_scraping_raw_complete.csv"]),
+    sep=";",
+    index=False,
 )

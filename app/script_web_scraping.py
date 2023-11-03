@@ -1,14 +1,17 @@
+import math
+from time import sleep
+
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from time import sleep
-import os
-import math
-import pandas as pd
-from utils import create_pdf_name, RAW_PATH
+
+from utils import RAW_PATH, create_pdf_name
 
 
 def extract_data_from_search_page(date_start: str, date_end: str):
-    """Extract data from search page of the site diariodeportugal for file.csv"""
+    """Extract data from search page of the site diariodeportugal.pt
+    for file.csv
+    """
 
     # Dict model data
     data = {
@@ -31,11 +34,18 @@ def extract_data_from_search_page(date_start: str, date_end: str):
     sleep(3)
 
     # Search
-    text_for_research = "Concede o estatuto de igualdade de direitos e deveres a vários cidadãos brasileiros"
-    input_place = browser.find_element(By.TAG_NAME, "input")  # Find the search box
+    text_for_research = """Concede o estatuto de igualdade de direitos
+        e deveres a vários cidadãos brasileiros
+        """
+
+    input_place = browser.find_element(
+        By.TAG_NAME, "input"
+    )  # Find the search box
     input_place.send_keys(text_for_research)  # Insert text
 
-    buttom_search = browser.find_element(By.ID, "b2-b2-myButton2")  # Find the buttom submit
+    buttom_search = browser.find_element(
+        By.ID, "b2-b2-myButton2"
+    )  # Find the buttom submit
     buttom_search.click()  # Submit
 
     sleep(3)
@@ -62,50 +72,72 @@ def extract_data_from_search_page(date_start: str, date_end: str):
 
     sleep(2)
 
-    date_start = "2023-06-01" # Insert date start
-    date_end = "2023-11-03" # Insert date end
+    date_start = "2023-06-01"  # Insert date start
+    date_end = "2023-11-03"  # Insert date end
 
     # Filter date start
-    date_published = browser.find_element(By.ID, "Input_dataPublicacaoDe") # Find box filter date
-    date_published.send_keys(date_start) # Insert date fmt AAAA-MM-DD
-    exit_calendar = browser.find_element(By.XPATH, "//*[@id='FiltrarResultados']/div[1]/span").click()
+    date_published = browser.find_element(
+        By.ID, "Input_dataPublicacaoDe"
+    )  # Find box filter date
+    date_published.send_keys(date_start)  # Insert date fmt AAAA-MM-DD
+    exit_calendar = browser.find_element(
+        By.XPATH, "//*[@id='FiltrarResultados']/div[1]/span"
+    )
+    exit_calendar.click()
 
     # Filter date end
-    date_published = browser.find_element(By.ID, "Input_DataPublicacaoAte") # Find box filter date
-    date_published.send_keys(date_end) # Insert date fmt AAAA-MM-DD
-    exit_calendar = browser.find_element(By.XPATH, "//*[@id='FiltrarResultados']/div[1]/span").click()
-    date_published_submit = browser.find_element(By.XPATH, "//*[@id='Pesquisa2']/div[3]/button/span")
+    date_published = browser.find_element(
+        By.ID, "Input_DataPublicacaoAte"
+    )  # Find box filter date
+    date_published.send_keys(date_end)  # Insert date fmt AAAA-MM-DD
+    exit_calendar.click()
+    date_published_submit = browser.find_element(
+        By.XPATH, "//*[@id='Pesquisa2']/div[3]/button/span"
+    )
     date_published_submit.click()
 
     sleep(2)
 
     # Check amount pages
     amount_search = browser.find_element(By.ID, "b3-Titulo")
-    extract_number = amount_search.find_elements(By.CSS_SELECTOR, "span")[3].text.split(" ")[0]
+    extract_number = amount_search.find_elements(By.CSS_SELECTOR, "span")[
+        3
+    ].text.split(" ")[0]
     amount_search_number = int(extract_number)
     total_pages = math.ceil(amount_search_number / 200)
 
     # Expand results 200
     if amount_search_number > 25:
-        expand_list = browser.find_element(By.XPATH, "//*[@id='ResultadosEncontrados']/div[2]/div[2]/div/div/span").click()
-        select_200_items = browser.find_element(By.XPATH, "//*[@id='transitionContainer']/div/div[2]/div/div/div[3]/a/span").click()
+        expand_list = browser.find_element(
+            By.XPATH,
+            "//*[@id='ResultadosEncontrados']/div[2]/div[2]/div/div/span",
+        )
+        expand_list.click()
+        select_200_items = browser.find_element(
+            By.XPATH,
+            "//*[@id='transitionContainer']/div/div[2]/div/div/div[3]/a/span",
+        )
+        select_200_items.click()
         sleep(2)
 
     # Data extraction
 
     # Navigate between the pages
-    i = total_pages # initial countdown
+    i = total_pages  # initial countdown
 
     for page in range(total_pages):
-        
-        body_results = browser.find_element(By.ID, "ListaResultados")  # Find data
+        body_results = browser.find_element(
+            By.ID, "ListaResultados"
+        )  # Find data
         list_href_page = body_results.find_elements(
             By.CLASS_NAME, "title"
         )  # Find element in data (create list)
 
         # Collects links from the current page
         for item_href in list_href_page:
-            link_page = item_href.get_attribute("href")  # Link for page 'despacho'
+            link_page = item_href.get_attribute(
+                "href"
+            )  # Link for page 'despacho'
             text_page = item_href.find_element(
                 By.CSS_SELECTOR, "span"
             ).text  # Extraction text 'despacho'
@@ -115,13 +147,13 @@ def extract_data_from_search_page(date_start: str, date_end: str):
             data["link_page"].append(link_page)
             data["name_pdf"].append(name_pdf)
 
-        i -= 1 # countdown
+        i -= 1  # countdown
 
         # next page
         if total_pages > 1 and i != 0:
-            next_page = browser.find_element(By.ID, "b27-Next").click()
+            next_page = browser.find_element(By.ID, "b27-Next")
+            next_page.click()
             sleep(2)
-
 
     for link in data["link_page"]:
         # Get link page 'despacho'
@@ -143,4 +175,6 @@ def extract_data_from_search_page(date_start: str, date_end: str):
 
     # Export data for spreadsheet
     data_for_csv = pd.DataFrame(data)
-    data_for_csv.to_csv("".join([RAW_PATH, "/data_scraping_raw.csv"]), sep=";", index=False)
+    data_for_csv.to_csv(
+        "".join([RAW_PATH, "/data_scraping_raw.csv"]), sep=";", index=False
+    )
