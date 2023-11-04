@@ -1,10 +1,10 @@
-# Estudos de Web Scraping
+# CPLP DATA
+## Compilação de informações sobre a Comunidade dos Países de Língua Portuguesa
 
-Utilizando as seguintes ferramentas:
+Utilizado as seguintes ferramentas:
 - Python
 - Selenium
 - Pandas
-- Scrapy
 - PyPDF2
 
 ## Primeiro Projeto - Estatuto de Igualdade
