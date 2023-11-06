@@ -1,6 +1,9 @@
 import os
 import re
 from datetime import datetime
+from time import sleep
+
+import urllib3
 
 # Path
 ROOT_PATH: str = os.path.dirname(__file__)
@@ -52,3 +55,29 @@ def if_age_is_valid(date: str) -> bool:
         return True
     else:
         return False
+
+
+def download_pdf(url: str, path: str) -> bool:
+    """Receive a pdf file link and download"""
+
+    http = urllib3.PoolManager()
+
+    response = http.request("GET", url, preload_content=False)
+    content_type = response.headers["content-type"]
+
+    print(f"Get -> {url}")
+
+    sleep(2)
+
+    if content_type == "application/pdf":
+        with open(path, "wb") as file:
+            for chunk in response.stream(1024):
+                file.write(chunk)
+
+    else:
+        print("Fail download")
+        return False
+
+    response.release_conn()
+    print(f"Download Done -> {path}\n")
+    return True
