@@ -1,14 +1,8 @@
 import re
 
-import pandas as pd
 from PyPDF2 import PdfReader
 
-from utils import (
-    PROCESSED_PATH,
-    RAW_PATH,
-    if_age_is_valid,
-    remove_space_between_digit,
-)
+from utils import if_age_is_valid, remove_space_between_digit
 
 
 def extract_text_pdf(file) -> list:
