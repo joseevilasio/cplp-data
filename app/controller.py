@@ -4,9 +4,9 @@ from typing import Optional
 
 import pandas as pd
 
-from extract_infor_pdf import extract_text_pdf
-from utils import PROCESSED_PATH, RAW_PATH, download_pdf
-from web_scraping import extract_data_from_search_page
+from app.extract_infor_pdf import extract_text_pdf
+from app.utils import PROCESSED_PATH, RAW_PATH, download_pdf
+from app.web_scraping import extract_data_from_search_page
 
 
 def web_scraping(
@@ -21,17 +21,36 @@ def web_scraping(
     date_end -> None, filter search today
     auto_mode -> If True filter search according to file logdatesearch.csv
     """
-
-    # TODO: Implementar decisões
+    
+    if auto_mode == False:
+        if date_start and date_end:
+            pass
+        elif date_start and date_end is None:
+            date_end = datetime.now().strftime("%Y-%m-%d")
+        elif date_start is None and date_end:
+            date_start = datetime.now().strftime("%Y-%m-%d")
+        else:
+            date_start = date_end = datetime.now().strftime("%Y-%m-%d")
+    elif auto_mode == True:
+        pass
+        #TODO: função consultar log
 
     # function extract, return file csv
-    extract_data_from_search_page(date_start, date_end)
+    data = extract_data_from_search_page(date_start, date_end)
+
+    # Export data for csv
+    data_for_csv = pd.DataFrame(data)
+    data_for_csv.to_csv(
+        "".join([RAW_PATH, f"/[{date_start}]-[{date_end}]-web-scraping.csv"]), sep=";", index=False
+    )
 
 
-def download_pdf_(
+def get_pdf(
     auto_mode: Optional[bool] = True, file_path: Optional[str] = None
 ):
-    """"""
+    """Receive a pdf file link and download, save infor in file csv"""
+
+    # TODO: Implementar decisões
 
     data_download = {
         "date_save_pdf": [],  # Date when save pdf
@@ -45,7 +64,7 @@ def download_pdf_(
     for index in range(len(data_links)):
         link_pdf = data_links.link_pdf[index]
         name_pdf = data_links.name_pdf[index]
-        path_pdf = "".join([RAW_PATH, f"/{name_pdf}"])
+        path_pdf = "".join([RAW_PATH, f"/{name_pdf}"]) # save
 
         if os.path.exists(path_pdf):
             result = True
@@ -73,6 +92,8 @@ def extract_infor(
     auto_mode: Optional[bool] = True, file_path: Optional[str] = None
 ):
     """"""
+    # TODO: Implementar decisões
+    
     data_scraping_complete = pd.read_csv(
         "".join([RAW_PATH, "/data_scraping_raw_complete.csv"]), sep=";"
     )

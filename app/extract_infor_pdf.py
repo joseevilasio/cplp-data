@@ -2,7 +2,7 @@ import re
 
 from PyPDF2 import PdfReader
 
-from utils import if_age_is_valid, remove_space_between_digit
+from app.utils import if_age_is_valid, remove_space_between_digit
 
 
 def extract_text_pdf(file) -> list:

@@ -1,20 +1,21 @@
 import math
 from time import sleep
 
-import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-from utils import RAW_PATH, create_pdf_name
+from app.utils import create_pdf_name
 
 
-def extract_data_from_search_page(date_start: str, date_end: str):
+def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     """Extract data from search page of the site diariodeportugal.pt
     for file.csv
+    format date = "AAAA-MM-DD"
     """
 
     # Dict model data
     data = {
+        "search_range": [], # search range
         "description": [],  # description
         "link_page": [],  # link page 'despacho'
         "link_pdf": [],  # link page file download
@@ -70,10 +71,7 @@ def extract_data_from_search_page(date_start: str, date_end: str):
     )  # Find the checkbox 'Série II'
     checkbox_serie[4].click()  # Check
 
-    sleep(2)
-
-    date_start = "2023-06-01"  # Insert date start
-    date_end = "2023-11-03"  # Insert date end
+    sleep(2)    
 
     # Filter date start
     date_published = browser.find_element(
@@ -143,6 +141,7 @@ def extract_data_from_search_page(date_start: str, date_end: str):
             ).text  # Extraction text 'despacho'
             name_pdf = create_pdf_name(text_page)
 
+            data["search_range"].append(f"[{date_start}]-[{date_end}]")
             data["description"].append(text_page)
             data["link_page"].append(link_page)
             data["name_pdf"].append(name_pdf)
@@ -173,8 +172,4 @@ def extract_data_from_search_page(date_start: str, date_end: str):
     # Close webdriver
     browser.quit()
 
-    # Export data for spreadsheet
-    data_for_csv = pd.DataFrame(data)
-    data_for_csv.to_csv(
-        "".join([RAW_PATH, "/data_scraping_raw.csv"]), sep=";", index=False
-    )
+    return data
