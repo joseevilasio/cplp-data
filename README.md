@@ -15,15 +15,15 @@ O estatuto de igualdade é acordo bilateral entre Brasil e Portugual. Que de aco
 *Na primeira fase a coleta de informações vai se concentar do lado de Portugal.*
 
 O estatuto há três possibilidades de solicitação: 
-1) - Estatuto de Igualdade de Direitos e Deveres;
-2) - Estatuto de Igualdade de Direitos Políticos;
-3) - Estatuto de Igualdade de Direitos e Deveres e de Direitos Políticos.
+1) Estatuto de Igualdade de Direitos e Deveres;
+2) Estatuto de Igualdade de Direitos Políticos;
+3) Estatuto de Igualdade de Direitos e Deveres e de Direitos Políticos.
 
 Cada solicitação tem seus requisitos, o principal requisito é o título residência para morar em Portugal, com a nova residência em vigor que é a **Autorização de Residência CPLP** que teve um elevado número de emissões por conta da facilidade. Isso levou ao aumento de solicitações do Estatuto de Igualdade de Direitos e Deveres, o projeto consiste na coleta dessas informações.
 
-1) Fazer um web scraping da página do diário de Portugal e coletar arquivos em PDF dos estatutos concedidos a brasileiros;
-2) Retirar as informações desses PDFs de forma nominal a quem foi concedido, data, decreto;
-3) Tirar insights a partir do dados.
+1) Fazer um web scraping da página [*Diário da República*](https://diariodarepublica.pt/dr/home) para coletar arquivos em PDF dos estatutos concedidos a brasileiros;
+2) Extrair as informações desses arquivos PDFs de forma nominal a quem foi concedido, data, despacho;
+3) Gerar insights a partir do dados.
 
 Utilizado as seguintes ferramentas:
 ```
@@ -31,5 +31,7 @@ Utilizado as seguintes ferramentas:
 - Selenium
 - Pandas
 - PyPDF2
+- Typer
 ```
 
+Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, consulte o [about](ABOUT.md)
