@@ -1,7 +1,7 @@
+import pandas as pd
 import typer
 from rich.console import Console
 from rich.table import Table
-import pandas as pd
 
 main = typer.Typer(name="CPLP DATA CLI", add_completion=False)
 
@@ -21,7 +21,13 @@ def report():
     """Read file default with information about data"""
 
     table = Table(title="CPLP DATA - Report")
-    fields = ["Search Range", "Pages", "Downloaded", "Pages Extract", "Names Extract"]
+    fields = [
+        "Search Range",
+        "Pages",
+        "Downloaded",
+        "Pages Extract",
+        "Names Extract",
+    ]
     for header in fields:
         table.add_column(header, style="magenta")
 
@@ -29,6 +35,6 @@ def report():
     default_dict = default.to_dict(orient="records")
 
     for row in default_dict:
-        table.add_row(*[str(value) for value in row.values()])    
+        table.add_row(*[str(value) for value in row.values()])
 
     Console().print(table)

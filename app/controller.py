@@ -37,7 +37,7 @@ def web_scraping(
     # function extract, return file csv
     data = extract_data_from_search_page(date_start, date_end)
 
-    # Export data for csv    
+    # Export data for csv
     web_scraping = pd.DataFrame(data)
     web_scraping.to_csv(
         "".join([RAW_PATH, f"[{date_start}]-[{date_end}]-web-scraping.csv"]),
@@ -66,7 +66,7 @@ def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
     for index in range(len(web_scraping)):
         link_pdf = web_scraping.link_pdf[index]  # link download
         name_pdf = web_scraping.name_pdf[index]  # pdf name
-        path_pdf = "".join([RAW_PATH, f"/{name_pdf}"])  # save
+        path_pdf = "".join([RAW_PATH, f"/pdf/{name_pdf}"])  # save
         search_range = web_scraping.search_range[index]
 
         if os.path.exists(path_pdf):

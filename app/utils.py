@@ -3,12 +3,14 @@ import re
 from datetime import datetime
 from time import sleep
 
+import pandas as pd
 import urllib3
 
 # Path
 ROOT_PATH: str = os.path.dirname(__file__)
-RAW_PATH: str = os.path.join(ROOT_PATH, "..", "assets/raw_data")
-PROCESSED_PATH: str = os.path.join(ROOT_PATH, "..", "assets/processed_data")
+LOG_PATH: str = os.path.join(ROOT_PATH, "/log/")
+RAW_PATH: str = os.path.join(ROOT_PATH, "..", "assets/raw_data/")
+PROCESSED_PATH: str = os.path.join(ROOT_PATH, "..", "assets/processed_data/")
 
 
 def create_pdf_name(text: str) -> str:
@@ -81,3 +83,36 @@ def download_pdf(url: str, path: str) -> bool:
     response.release_conn()
     print(f"Download Done -> {path}\n")
     return True
+
+
+def automode(phase: str) -> str:
+    """Check the standard mode and start the phase according to the data
+    already collected.
+    param phase: Type mode `scraping`, `get_pdf`, `extract`
+    """
+    default = pd.read_csv("./app/log/default.csv", sep=";")
+
+    for index in range(len(default)):
+        if default.amount_of_pages[index] <= 0 and phase == "scraping":
+            search_range = default.search_range[index].split("]-[")
+            date_start = search_range[0].replace("[", "")
+            date_end = search_range[1].replace("]", "")
+
+            return date_start, date_end
+
+        elif default.download_of_pdf[index] <= 0 and phase == "get_pdf":
+            search_range = default.search_range[index]
+            file_path = "".join([RAW_PATH, f"{search_range}-web-scraping.csv"])
+
+            return file_path
+
+        elif (
+            default.amount_of_pages_extracted[index] <= 0
+            and phase == "extract"
+        ):
+            search_range = default.search_range[index]
+            file_path = "".join(
+                [RAW_PATH, f"{search_range}-path-pdf-to-extract.csv"]
+            )
+
+            return file_path
