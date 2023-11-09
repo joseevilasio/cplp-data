@@ -15,7 +15,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     # Dict model data
     data = {
-        "search_range": [], # search range
+        "search_range": [],  # search range
         "description": [],  # description
         "link_page": [],  # link page 'despacho'
         "link_pdf": [],  # link page file download
@@ -71,7 +71,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     )  # Find the checkbox 'Série II'
     checkbox_serie[4].click()  # Check
 
-    sleep(2)    
+    sleep(2)
 
     # Filter date start
     date_published = browser.find_element(
