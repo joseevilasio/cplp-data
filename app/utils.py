@@ -107,7 +107,7 @@ def automode(phase: str) -> str:
             return file_path
 
         elif (
-            default.amount_of_pages_extracted[index] <= 0
+            default.amount_of_pdf_pages_extracted[index] <= 0
             and phase == "extract"
         ):
             search_range = default.search_range[index]
@@ -136,7 +136,7 @@ def update_default(data: list, range: str, phase: str):
         df.at[row, "download_of_pdf"] = data[0]
 
     elif phase == "extract":
-        df.at[row, "amount_of_pages_extracted"] = data[0]
+        df.at[row, "amount_of_pdf_pages_extracted"] = data[0]
         df.at[row, "amount_of_name_extracted"] = data[1]
 
     df.to_csv("./app/log/default.csv", sep=";", index=False)
