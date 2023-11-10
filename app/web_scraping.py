@@ -8,9 +8,11 @@ from app.utils import create_pdf_name
 
 
 def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
-    """Extract data from search page of the site diariodeportugal.pt
+    """Extract data from search page of the site diariodarepublica.pt
     for file.csv
-    format date = "AAAA-MM-DD"
+    param date_start: initial date search.
+    param date_end: end date search.
+    - `format date = "AAAA-MM-DD"`
     """
 
     # Dict model data
