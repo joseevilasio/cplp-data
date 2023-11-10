@@ -116,3 +116,27 @@ def automode(phase: str) -> str:
             )
 
             return file_path
+
+
+def update_default(data: list, range: str, phase: str):
+    """Insert new data the phase according to the data
+    already collected.
+    param data: list of data.
+    param range: search range.
+    param phase: Type mode `scraping`, `get_pdf`, `extract`.
+    """
+
+    df = pd.read_csv("./app/log/default.csv", sep=";")
+    row = df.index[df.eq(range).any(axis=1)].values[0]
+
+    if phase == "scraping":
+        df.at[row, "amount_of_pages"] = data[0]
+
+    elif phase == "get_pdf":
+        df.at[row, "download_of_pdf"] = data[0]
+
+    elif phase == "extract":
+        df.at[row, "amount_of_pages_extracted"] = data[0]
+        df.at[row, "amount_of_name_extracted"] = data[1]
+
+    df.to_csv("./app/log/default.csv", sep=";", index=False)
