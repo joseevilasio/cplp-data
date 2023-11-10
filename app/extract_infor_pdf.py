@@ -52,4 +52,4 @@ def extract_text_pdf(file) -> list:
                 birth_date.append(item)
                 print(f"Date: {item}")
 
-    return name, birth_date
+    return [name, birth_date, number_of_pages]
