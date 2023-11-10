@@ -34,4 +34,4 @@ Utilizado as seguintes ferramentas:
 - Typer
 ```
 
-Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, consulte o [about](ABOUT.md)
+Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, [veja aqui!](about_project.md)
