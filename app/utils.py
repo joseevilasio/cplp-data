@@ -85,7 +85,7 @@ def download_pdf(url: str, path: str) -> bool:
     return True
 
 
-def automode(phase: str) -> str:
+def automode(phase: str) -> list:
     """Check the standard mode and start the phase according to the data
     already collected.
     param phase: Type mode `scraping`, `get_pdf`, `extract`
@@ -98,7 +98,7 @@ def automode(phase: str) -> str:
             date_start = search_range[0].replace("[", "")
             date_end = search_range[1].replace("]", "")
 
-            return date_start, date_end
+            return [date_start, date_end]
 
         elif default.download_of_pdf[index] <= 0 and phase == "get_pdf":
             search_range = default.search_range[index]
@@ -106,16 +106,25 @@ def automode(phase: str) -> str:
 
             return file_path
 
-        elif (
-            default.amount_of_pdf_pages_extracted[index] <= 0
-            and phase == "extract"
-        ):
+        elif default.pdf_pages_extracted[index] <= 0 and phase == "extract":
             search_range = default.search_range[index]
             file_path = "".join(
                 [RAW_PATH, f"{search_range}-path-pdf-to-extract.csv"]
             )
 
             return file_path
+
+    if phase == "scraping":
+        print("There are search range to web scraping!")
+        return False
+
+    if phase == "get_pdf":
+        print("There are no PDFs to download!")
+        return False
+
+    if phase == "extract":
+        print("There are no PDFs to extract!")
+        return False
 
 
 def update_default(data: list, range: str, phase: str):
@@ -136,7 +145,7 @@ def update_default(data: list, range: str, phase: str):
         df.at[row, "download_of_pdf"] = data[0]
 
     elif phase == "extract":
-        df.at[row, "amount_of_pdf_pages_extracted"] = data[0]
+        df.at[row, "pdf_pages_extracted"] = data[0]
         df.at[row, "amount_of_name_extracted"] = data[1]
 
     df.to_csv("./app/log/default.csv", sep=";", index=False)
