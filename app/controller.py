@@ -5,7 +5,13 @@ from typing import Optional
 import pandas as pd
 
 from app.extract_infor_pdf import extract_text_pdf
-from app.utils import PROCESSED_PATH, RAW_PATH, automode, download_pdf
+from app.utils import (
+    PROCESSED_PATH,
+    RAW_PATH,
+    automode,
+    download_pdf,
+    update_default,
+)
 from app.web_scraping import extract_data_from_search_page
 
 
@@ -22,6 +28,7 @@ def web_scraping(
                     to setting default
     """
 
+    # decision tree to set date
     if auto_mode is False:
         if date_start and date_end:
             pass
@@ -32,15 +39,27 @@ def web_scraping(
         else:
             date_start = date_end = datetime.now().strftime("%Y-%m-%d")
     elif auto_mode:
-        date_start, date_end = automode("scraping")
+        if automode("scraping") is False:
+            return None
+        else:
+            date_start, date_end = automode("scraping")
 
     # function extract, return file csv
     data = extract_data_from_search_page(date_start, date_end)
 
-    # Export data for csv
+    search_range = f"[{date_start}]-[{date_end}]"
+
+    # Convert data in Dataframe
     web_scraping = pd.DataFrame(data)
+
+    # update data in file default
+    if auto_mode:
+        amount_of_pages = [web_scraping["link_page"].count()]
+        update_default(amount_of_pages, search_range, "scraping")
+
+    # Export Dataframe in csv
     web_scraping.to_csv(
-        "".join([RAW_PATH, f"[{date_start}]-[{date_end}]-web-scraping.csv"]),
+        "".join([RAW_PATH, search_range, "-web-scraping.csv"]),
         sep=";",
         index=False,
     )
@@ -53,8 +72,12 @@ def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
     param file_path: `Default - None` Get pdf according to file
     """
 
+    # start read default
     if auto_mode:
-        file_path = automode("get_pdf")
+        if automode("get_pdf") is False:
+            return None
+        else:
+            file_path = automode("get_pdf")
 
     data_download = {
         "date_save_pdf": [],  # Date when save pdf
@@ -82,6 +105,11 @@ def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
 
     data_download = pd.DataFrame(data_download)
 
+    # update data in file default
+    if auto_mode:
+        download_of_pdf = [data_download["pdf_ok"].count()]
+        update_default(download_of_pdf, search_range, "get_pdf")
+
     # Concat data download and data infor links
     path_pdf_to_extract = pd.concat([web_scraping, data_download], axis=1)
     path_pdf_to_extract.to_csv(
@@ -101,7 +129,10 @@ def extract_infor(
     """
 
     if auto_mode:
-        file_path = automode("extract")
+        if automode("extract") is False:
+            return None
+        else:
+            file_path = automode("extract")
 
     path_pdf_to_extract = pd.read_csv("".join([file_path]), sep=";")
 
@@ -114,16 +145,22 @@ def extract_infor(
         "extract_complete": [],
     }
 
+    pages = 0
+
     for index in range(len(path_pdf_to_extract)):
         name_pdf = path_pdf_to_extract.name_pdf[index]
-        file_pdf = "".join([RAW_PATH, f"/{name_pdf}"])
+        file_pdf = "".join([RAW_PATH, f"/pdf/{name_pdf}"])
         exist_file = path_pdf_to_extract.pdf_ok[index]
         description = path_pdf_to_extract.description[index]
         link_page = path_pdf_to_extract.link_page[index]
         search_range = path_pdf_to_extract.search_range[index]
 
         if exist_file:
-            list_name, list_birth_date = extract_text_pdf(file=file_pdf)
+            list_name, list_birth_date, number_of_pages = extract_text_pdf(
+                file=file_pdf
+            )
+
+            pages = pages + number_of_pages
 
             [data["name"].append(name) for name in list_name]
             [
@@ -158,14 +195,14 @@ def extract_infor(
             data["search_range"].append(search_range)
 
     data_extract = pd.DataFrame(data)
+
+    # update data in file default
+    if auto_mode:
+        data = [pages, data_extract["name"].count()]
+        update_default(data, search_range, "extract")
+
     data_extract.to_csv(
         "".join([PROCESSED_PATH, f"{search_range}-extract-pdf-complete.csv"]),
         sep=";",
         index=False,
     )
-
-    print(len(data["extract_complete"]))
-    print(len(data["birth_date"]))
-    print(len(data["description"]))
-    print(len(data["link_page"]))
-    print(len(data["name"]))
