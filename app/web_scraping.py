@@ -3,6 +3,7 @@ from time import sleep
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from rich import print
 
 from app.utils import create_pdf_name
 
@@ -15,6 +16,8 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     - `format date = "AAAA-MM-DD"`
     """
 
+    print(f"| SEARCH RANGE -> {date_start}  {date_end} <- |")
+    
     # Dict model data
     data = {
         "search_range": [],  # search range
@@ -98,12 +101,20 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     sleep(2)
 
-    # Check amount pages
-    amount_search = browser.find_element(By.ID, "b3-Titulo")
-    extract_number = amount_search.find_elements(By.CSS_SELECTOR, "span")[
-        3
-    ].text.split(" ")[0]
-    amount_search_number = int(extract_number)
+    # Check amount pages   
+
+    amount_search = browser.find_elements(By.CLASS_NAME, "OSFillParent")    
+
+    amount_search_number = amount_search[13] if len(amount_search) > 13 else amount_search[10]
+    amount_search_number = amount_search_number.text.split(" ")[0]
+    amount_search_number = int(amount_search_number)
+
+    # Check result search
+    if amount_search_number == 0:
+        print("[bold red]No information found for scraping![/bold red]")
+        browser.quit()
+        return data
+
     total_pages = math.ceil(amount_search_number / 200)
 
     # Expand results 200
