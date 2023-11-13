@@ -5,6 +5,12 @@ description = "Compile information about CPLP"
 authors = ["joseevilasio <jose_evilasio@outlook.com>"]
 license = "MIT License"
 readme = "README.md"
+packages = [
+    { include = "app" },
+]
+
+[tool.poetry.scripts]
+cplpdata = "app.cli:app"
 
 
 [tool.flake8]
