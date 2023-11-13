@@ -1,9 +1,10 @@
 import math
 from time import sleep
 
+import typer
+from rich import print
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from rich import print
 
 from app.utils import create_pdf_name
 
@@ -16,8 +17,8 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     - `format date = "AAAA-MM-DD"`
     """
 
-    print(f"| SEARCH RANGE -> {date_start}  {date_end} <- |")
-    
+    print(f"Search range | {date_start} | {date_end} |")
+
     # Dict model data
     data = {
         "search_range": [],  # search range
@@ -29,13 +30,16 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     # Config webdriver
     options = webdriver.FirefoxOptions()
-    # options.set_preference("headless", True)
+    # options.add_argument('--headless')
 
     # Instance
     browser = webdriver.Firefox(options=options)
 
     # Get initial
-    browser.get("https://diariodarepublica.pt/dr/home")
+    url = "https://diariodarepublica.pt/dr/home"
+    browser.get(url)
+
+    print(f"Digging up information from '{url}'")
 
     sleep(3)
 
@@ -101,13 +105,17 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     sleep(2)
 
-    # Check amount pages   
+    # Check amount pages
 
-    amount_search = browser.find_elements(By.CLASS_NAME, "OSFillParent")    
+    amount_search = browser.find_elements(By.CLASS_NAME, "OSFillParent")
 
-    amount_search_number = amount_search[13] if len(amount_search) > 13 else amount_search[10]
+    amount_search_number = (
+        amount_search[13] if len(amount_search) > 13 else amount_search[10]
+    )
     amount_search_number = amount_search_number.text.split(" ")[0]
     amount_search_number = int(amount_search_number)
+
+    print(f"Found {amount_search_number} pages.")
 
     # Check result search
     if amount_search_number == 0:
@@ -135,6 +143,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     # Navigate between the pages
     i = total_pages  # initial countdown
+    print("Digging data (description - link page - name pdf)")
 
     for page in range(total_pages):
         body_results = browser.find_element(
@@ -145,19 +154,26 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         )  # Find element in data (create list)
 
         # Collects links from the current page
-        for item_href in list_href_page:
-            link_page = item_href.get_attribute(
-                "href"
-            )  # Link for page 'despacho'
-            text_page = item_href.find_element(
-                By.CSS_SELECTOR, "span"
-            ).text  # Extraction text 'despacho'
-            name_pdf = create_pdf_name(text_page)
+        with typer.progressbar(
+            list_href_page, label="Collecting "
+        ) as list_href_page:
+            x = 0
+            for item_href in list_href_page:
+                link_page = item_href.get_attribute(
+                    "href"
+                )  # Link for page 'despacho'
+                text_page = item_href.find_element(
+                    By.CSS_SELECTOR, "span"
+                ).text  # Extraction text 'despacho'
+                name_pdf = create_pdf_name(text_page)
 
-            data["search_range"].append(f"[{date_start}]-[{date_end}]")
-            data["description"].append(text_page)
-            data["link_page"].append(link_page)
-            data["name_pdf"].append(name_pdf)
+                data["search_range"].append(f"[{date_start}]-[{date_end}]")
+                data["description"].append(text_page)
+                data["link_page"].append(link_page)
+                data["name_pdf"].append(name_pdf)
+                x += 1
+
+            print(f"Collected {x}.")
 
         i -= 1  # countdown
 
@@ -167,20 +183,28 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
             next_page.click()
             sleep(2)
 
-    for link in data["link_page"]:
-        # Get link page 'despacho'
-        browser.get(f"{link}")
+    # Extract link PDF
+    total = amount_search_number
+    print("Digging data (link pdf)")
+    with typer.progressbar(data["link_page"], label="Collecting ") as progress:
+        for link in progress:
+            # Get link page 'despacho'
+            browser.get(f"{link}")
 
-        sleep(3)
+            sleep(3)
 
-        list_elements_page_download = browser.find_elements(
-            By.CLASS_NAME, "ThemeGrid_MarginGutter"
-        )  # List of elements in page
-        download_link_pdf = list_elements_page_download[-1].get_attribute(
-            "href"
-        )  # Extraction link file pdf
+            list_elements_page_download = browser.find_elements(
+                By.CLASS_NAME, "ThemeGrid_MarginGutter"
+            )  # List of elements in page
+            download_link_pdf = list_elements_page_download[-1].get_attribute(
+                "href"
+            )  # Extraction link file pdf
 
-        data["link_pdf"].append(download_link_pdf)
+            data["link_pdf"].append(download_link_pdf)
+
+            # progress.update(total)
+
+        print(f"Collected {total}.")
 
     # Close webdriver
     browser.quit()
