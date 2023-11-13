@@ -56,13 +56,12 @@ def web_scraping(
     if auto_mode:
         amount_of_pages = [web_scraping["link_page"].count()]
         update_default(amount_of_pages, search_range, "scraping")
+        print("Updated dafault data.")
 
     # Export Dataframe in csv
-    web_scraping.to_csv(
-        "".join([RAW_PATH, search_range, "-web-scraping.csv"]),
-        sep=";",
-        index=False,
-    )
+    file_path = "".join([RAW_PATH, search_range, "-web-scraping.csv"])
+    web_scraping.to_csv(file_path, sep=";", index=False)
+    print(f"Data saved in '{file_path}'")
 
 
 def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
