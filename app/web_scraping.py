@@ -51,7 +51,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     input_place = browser.find_element(
         By.TAG_NAME, "input"
     )  # Find the search box
-    input_place.send_keys(text_for_research)  # Insert text
+    input_place.send_keys(f'"{text_for_research}"')  # Insert text
 
     buttom_search = browser.find_element(
         By.ID, "b2-b2-myButton2"
@@ -78,7 +78,10 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     checkbox_serie = browser.find_elements(
         By.CLASS_NAME, "checkbox"
     )  # Find the checkbox 'Série II'
-    checkbox_serie[4].click()  # Check
+    if len(checkbox_serie) == 4:
+        checkbox_serie[3].click()  # Check
+    else:
+        checkbox_serie[4].click()  # Check
 
     sleep(2)
 
