@@ -61,7 +61,7 @@ A utilização é realizada através do CLI. É possível utilizar a função 'a
 $ poetry run cplpdata --help
 ```
 
-![](cplp-data/assets/imgs/cli-help.png)
+![cplp-data/assets/imgs/cli-help.png](https://github.com/joseevilasio/cplp-data/blob/main/assets/imgs/cli-help.png)
 
 Comandos:
  - report
@@ -70,5 +70,5 @@ Comandos:
  - start-extract-pdf
  - start-web-scraping
 
-![](cplp-data/assets/imgs/cli-help.png)
+![cplp-data/assets/imgs/cli-help.png](https://github.com/joseevilasio/cplp-data/blob/main/assets/imgs/cli-screenrecord.gif)
 
