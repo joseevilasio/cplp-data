@@ -5,7 +5,7 @@ from PyPDF2 import PdfReader
 from app.utils import if_age_is_valid, remove_space_between_digit
 
 
-def extract_text_pdf(file) -> list:
+def extract_text_pdf(file: str, verbose: bool = False) -> list:
     """Extract name and date of birth from PDF"""
 
     reader = PdfReader(file)  # instance
@@ -42,14 +42,17 @@ def extract_text_pdf(file) -> list:
             pattern_date, extract_infor
         )  # regex split with pattern date
 
-        print(f"Extract start -> page: {number + 1} path: {file}")
+        if verbose:
+            print(f"Extract start -> page: {number + 1} path: {file}")
 
         for item in list_infor_split:
             if re.search(pattern_name, item):
                 name.append(item.strip())
-                print(f"Name: {item.strip()} --- ", end="")
+                if verbose:
+                    print(f"Name: {item.strip()} --- ", end="")
             elif re.search(pattern_date, item) and if_age_is_valid(item):
                 birth_date.append(item)
-                print(f"Date: {item}")
+                if verbose:
+                    print(f"Date: {item}")
 
     return [name, birth_date, number_of_pages]

@@ -173,7 +173,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
                 data["name_pdf"].append(name_pdf)
                 x += 1
 
-            print(f"Collected {x}.")
+            print(f"\nCollected {x}")
 
         i -= 1  # countdown
 
@@ -204,7 +204,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
             # progress.update(total)
 
-        print(f"Collected {total}.")
+        print(f"\nCollected {total}.")
 
     # Close webdriver
     browser.quit()
