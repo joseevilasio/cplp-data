@@ -1,10 +1,13 @@
+from typing import Optional
+
 import pandas as pd
 import typer
 from rich import print
 from rich.console import Console
 from rich.table import Table
+from typing_extensions import Annotated
 
-from app.controller import web_scraping
+from app.controller import extract_infor, get_pdf, web_scraping
 
 app = typer.Typer(name="CPLP DATA CLI", add_completion=False)
 
@@ -25,21 +28,40 @@ def start_web_scraping(
 
 
 @app.command()
-def start_download_pdf():
+def start_download_pdf(
+    path: Annotated[Optional[str], typer.Argument()] = None
+):
     """Start download PDF"""
-    pass
+
+    print("[bold green]Start download![/bold green] :file_folder:")
+
+    get_pdf(file_path=path)
+
+    print("[bold green]DONE![/bold green] :nerd_face:")
 
 
 @app.command()
-def start_extract_pdf():
+def start_extract_pdf(path: Annotated[Optional[str], typer.Argument()] = None):
     """Start extract info in PDF"""
-    pass
+
+    print("[bold green]Start extract![/bold green] :detective:")
+
+    extract_infor(file_path=path)
+
+    print("[bold green]DONE![/bold green] :nerd_face:")
 
 
 @app.command()
 def start_automode():
     """Start AUTOMODE according to the configured default"""
-    pass
+
+    print("[bold green]Start AUTOMODE![/bold green] :robot_face:")
+
+    web_scraping(auto_mode=True)
+    get_pdf()
+    extract_infor()
+
+    print("[bold green]DONE![/bold green] :nerd_face:")
 
 
 @app.command()

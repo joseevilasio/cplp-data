@@ -8,7 +8,7 @@ A Comunidade dos Países de Língua Portuguesa (CPLP) é uma organização de co
 
 O projeto tem como objetivo compilar informações resultantes das ações da CPLP para servir de apoio para estudos, análise de dados e facilitar a consulta dos dados por parte dos cidadãos da CPLP.
 
-## Primeiro Projeto - Estatuto de Igualdade de Direitos e Deveres
+## Primeiro Projeto - Estatuto de Igualdade de Direitos e Deveres [Em desenvolvimento]
 
 O estatuto de igualdade é acordo bilateral entre Brasil e Portugual. Que de acordo com as informações do site ePortugal: "O Estatuto de Igualdade de Direitos e Deveres confere a cidadãos brasileiros residentes em Portugal um conjunto de direitos nas áreas do trabalho, economia, política, entre outras. Este estatuto pode ser pedido pelo correio ou presencialmente."
 
@@ -35,3 +35,40 @@ Utilizado as seguintes ferramentas:
 ```
 
 Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, [veja aqui!](about_project.md)
+
+### 📋 Pré-requisitos
+
+```
+Python
+Poetry
+```
+### 🔧 Instalação
+
+Fazer um clone do repositório do projeto:
+```
+$ gh repo clone joseevilasio/cplp-data
+```
+Instalar as dependências do projeto com o Poetry:
+```
+$ poetry install
+```
+
+### 📦 Como funciona
+
+A utilização é realizada através do CLI. É possível utilizar a função 'automode' para de acordo o arquivo *default.csv* buscar os intervalos prédefinidos de pesquisa, ou inserir a data inicial/final com o 'start-web-scraping'. Com as informações do web-scraping inicia o download dos arquivos PDFs com a função 'start-download-pdf' ao passar o caminho do arquivo que deseja fazer o download ou ativar o automode que busca referência no em *default.csv*, em seguida a função 'start-extract-pdf' extrai as informações para um arquivo csv.
+
+```
+$ poetry run cplpdata --help
+```
+
+![](cplp-data/assets/imgs/cli-help.png)
+
+Comandos:
+ - report
+ - start-automode
+ - start-download-pdf
+ - start-extract-pdf
+ - start-web-scraping
+
+![](cplp-data/assets/imgs/cli-help.png)
+

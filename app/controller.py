@@ -20,7 +20,7 @@ def web_scraping(
     date_start: Optional[str] = None,
     date_end: Optional[str] = None,
     auto_mode: Optional[bool] = False,
-) -> str:
+):
     """Extract data from search page of the site diariodeportugal.pt
     for file.csv according to date information.
     param date_start: `Default - None`, filter search today
@@ -67,9 +67,7 @@ def web_scraping(
     return file_path
 
 
-def get_pdf(
-    auto_mode: Optional[bool] = True, file_path: Optional[str] = None
-) -> str:
+def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
     """Receive a pdf file link and download, save infor in file csv
     param auto_mode: `Default - True` If True get pdf according
                     to setting default
@@ -132,7 +130,7 @@ def get_pdf(
 
 def extract_infor(
     auto_mode: Optional[bool] = True, file_path: Optional[str] = None
-) -> str:
+):
     """Extract infor PDF, save infor in file csv
     param auto_mode: `Default - True` If True extract infor according
                     to setting default
