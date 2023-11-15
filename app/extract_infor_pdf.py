@@ -26,6 +26,7 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
             .replace(".", "")
             .replace("//", "/")
             .replace("’", "")
+            .replace(" ‘ ", "")
         )  # remove line break and symbol dot
         word_initial_point = "nascimento"  # starting point for cutting
 
@@ -36,20 +37,22 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
 
         extract_infor = text[index_initial:]  # information after index initial
         extract_infor = remove_space_between_digit(extract_infor)
-        extract_infor = extract_infor.replace("-", "/")
+        extract_infor = extract_infor.replace("-", "/")       
 
         list_infor_split = re.split(
             pattern_date, extract_infor
-        )  # regex split with pattern date
+        )  # regex split with pattern date       
 
         if verbose:
+            print(extract_infor)
+            print(list_infor_split)
             print(f"Extract start -> page: {number + 1} path: {file}")
 
         for item in list_infor_split:
-            if re.search(pattern_name, item):
-                name.append(item.strip())
+            if re.search(pattern_name, item.replace("/", "")):
+                name.append(item.strip().replace("/", "-"))
                 if verbose:
-                    print(f"Name: {item.strip()} --- ", end="")
+                    print(f"Name: {item.strip().replace('/','-')} --- ", end="")
             elif re.search(pattern_date, item) and if_age_is_valid(item):
                 birth_date.append(item)
                 if verbose:
