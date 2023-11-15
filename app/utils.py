@@ -16,7 +16,7 @@ PROCESSED_PATH: str = os.path.join(ROOT_PATH, "..", "assets/processed_data/")
 def create_pdf_name(text: str) -> str:
     """transforms the description into a name for pdf file"""
 
-    pattern = r"(\b\d{3,5}/\d{4}\b)"
+    pattern = r"(\b\d{1,5}/\d{4}\b)"
     list_re = re.split(pattern, text)
     pdf_name = "".join(["despacho_", list_re[1], "_dr_", list_re[3], ".pdf"])
     pdf_name = pdf_name.replace("/", "-")
@@ -101,7 +101,7 @@ def automode(phase: str) -> list:
             search_range = default.search_range[index]
             file_path = "".join([RAW_PATH, f"{search_range}-web-scraping.csv"])
 
-            return file_path
+            return [file_path, True]
 
         elif default.pdf_pages_extracted[index] <= 0 and phase == "extract":
             search_range = default.search_range[index]
@@ -109,7 +109,7 @@ def automode(phase: str) -> list:
                 [RAW_PATH, f"{search_range}-path-pdf-to-extract.csv"]
             )
 
-            return file_path
+            return [file_path, True]
 
     if phase == "scraping":
         print("There are search range to web scraping!")
