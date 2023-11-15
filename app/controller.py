@@ -79,7 +79,7 @@ def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
         if automode("get_pdf") is False:
             return None
         else:
-            file_path = automode("get_pdf")
+            file_path, path_automode = automode("get_pdf")
 
     data_download = {
         "date_save_pdf": [],  # Date when save pdf
@@ -114,7 +114,7 @@ def get_pdf(auto_mode: Optional[bool] = True, file_path: Optional[str] = None):
     data_download = pd.DataFrame(data_download)
 
     # update data in file default
-    if auto_mode and file_path is None:
+    if auto_mode and path_automode:
         download_of_pdf = [data_download["pdf_ok"].count()]
         update_default(download_of_pdf, search_range, "get_pdf")
         print("Updated dafault data.")
@@ -141,7 +141,7 @@ def extract_infor(
         if automode("extract") is False:
             return None
         else:
-            file_path = automode("extract")
+            file_path, path_automode = automode("extract")
 
     path_pdf_to_extract = pd.read_csv("".join([file_path]), sep=";")
 
@@ -157,7 +157,7 @@ def extract_infor(
     pages = 0
     length = len(path_pdf_to_extract)
 
-    print(f"Found {length} pages for extract")
+    print(f"Found {length} PDFs for extract")
     print("Extracting (name, birth date)")
     with typer.progressbar(length=length, label="Extracting ") as progress:
         for index in progress:
@@ -172,6 +172,9 @@ def extract_infor(
                 list_name, list_birth_date, number_of_pages = extract_text_pdf(
                     file=file_pdf
                 )
+                
+                if len(list_name) != len(list_birth_date):
+                    print(f"Alert! file: {file_pdf}")
 
                 pages = pages + number_of_pages
 
@@ -209,10 +212,10 @@ def extract_infor(
 
     data_extract = pd.DataFrame(data)
 
-    print(f"\nExtracted: {pages} pages, {data_extract['name'].count()} names.")
+    print(f"\nExtracted: {pages} PDF pages, {data_extract['name'].count()} names.")
 
     # update data in file default
-    if auto_mode and file_path is None:
+    if auto_mode and path_automode:
         data = [pages, data_extract["name"].count()]
         update_default(data, search_range, "extract")
         print("Updated dafault data.")
