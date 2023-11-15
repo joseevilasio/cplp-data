@@ -116,9 +116,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         amount_search[13] if len(amount_search) > 13 else amount_search[10]
     )
     amount_search_number = amount_search_number.text.split(" ")[0]
-    amount_search_number = int(amount_search_number)
-
-    print(f"Found {amount_search_number} pages.")
+    amount_search_number = int(amount_search_number)    
 
     # Check result search
     if amount_search_number == 0:
@@ -126,27 +124,30 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         browser.quit()
         return data
 
-    total_pages = math.ceil(amount_search_number / 200)
+    total_pages = math.ceil(amount_search_number / 25)
 
-    # Expand results 200
-    if amount_search_number > 25:
-        expand_list = browser.find_element(
-            By.XPATH,
-            "//*[@id='ResultadosEncontrados']/div[2]/div[2]/div/div/span",
-        )
-        expand_list.click()
-        select_200_items = browser.find_element(
-            By.XPATH,
-            "//*[@id='transitionContainer']/div/div[2]/div/div/div[3]/a/span",
-        )
-        select_200_items.click()
-        sleep(2)
+    # Expand results 200 [disabled]
+    # if amount_search_number > 25:
+    #     print("expandir lista")
+    #     expand_list = browser.find_element(
+    #         By.XPATH,
+    #         "//*[@id='ResultadosEncontrados']/div[2]/div[2]/div/div/span",
+    #     )
+    #     expand_list.click()
+    #     select_200_items = browser.find_element(
+    #         By.XPATH,
+    #         "//*[@id='transitionContainer']/div/div[2]/div/div/div[3]/a/span",
+    #     )
+    #     select_200_items.click()
+    #     sleep(2)
 
     # Data extraction
 
     # Navigate between the pages
     i = total_pages  # initial countdown
-    print("Digging data (description - link page - name pdf)")
+    x = 0 # initial count get items
+    
+    print(f"Found {amount_search_number} items in {total_pages} pages.")
 
     for page in range(total_pages):
         body_results = browser.find_element(
@@ -157,10 +158,11 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         )  # Find element in data (create list)
 
         # Collects links from the current page
+        print(f"Digging data (description - link page - name pdf) in page {i}")
         with typer.progressbar(
             list_href_page, label="Collecting "
         ) as list_href_page:
-            x = 0
+            
             for item_href in list_href_page:
                 link_page = item_href.get_attribute(
                     "href"
@@ -176,7 +178,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
                 data["name_pdf"].append(name_pdf)
                 x += 1
 
-            print(f"\nCollected {x}")
+            print(f"\nCollected {x} items")
 
         i -= 1  # countdown
 
