@@ -29,10 +29,14 @@ def remove_space_between_digit(text: str) -> str:
 
     numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     i = 0
+    length = len(text)
     text_compile = []
 
     for character in text:
-        if character == " " and text[i - 1] in numbers:
+
+        if (length - 1) == i:
+            pass
+        elif character == " " and text[i - 1] in numbers:
             pass
         elif character == " " and text[i + 1] in numbers:
             pass
