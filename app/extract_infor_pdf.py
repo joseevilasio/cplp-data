@@ -28,7 +28,11 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
             .replace("’", "")
             .replace(" ‘ ", "")
         )  # remove line break and symbol dot
-        word_initial_point = "nascimento"  # starting point for cutting
+
+        word = ["nascimento", "nasc"]
+        word = word[1] if text.lower().find(word[0]) == -1 else word[0]
+
+        word_initial_point = word # starting point for cutting
 
         amount_word_initial_point = len(word_initial_point)
         index_initial = (

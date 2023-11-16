@@ -146,6 +146,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
     # Navigate between the pages
     i = total_pages  # initial countdown
     x = 0 # initial count get items
+    p = 0 # initial count pages in for
     
     print(f"Found {amount_search_number} items in {total_pages} pages.")
 
@@ -157,8 +158,10 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
             By.CLASS_NAME, "title"
         )  # Find element in data (create list)
 
+        p += 1
+
         # Collects links from the current page
-        print(f"Digging data (description - link page - name pdf) in page {i}")
+        print(f"Digging data (description - link page - name pdf) in page {p}/{total_pages}")
         with typer.progressbar(
             list_href_page, label="Collecting "
         ) as list_href_page:
