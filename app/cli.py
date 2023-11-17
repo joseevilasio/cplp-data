@@ -57,13 +57,22 @@ def start_automode():
 
     print("[bold green]Start AUTOMODE![/bold green] :robot_face:")
 
-    print("[bold navy_blue] -- web scraping -- [/bold navy_blue] :robot_face: :mag:")
+    print(
+        """[bold navy_blue] -- web scraping -- [/bold navy_blue]
+        :robot_face: :mag:"""
+    )
     web_scraping(auto_mode=True)
 
-    print("[bold blue1] -- download PDF -- [/bold blue1] :robot_face: :file_folder:")
+    print(
+        """[bold blue1] -- download PDF -- [/bold blue1] :robot_face:
+        :file_folder:"""
+    )
     get_pdf()
 
-    print("[bold dodger_blue2] -- extract infor -- [/bold dodger_blue2] :robot_face: :detective:")
+    print(
+        """[bold dodger_blue2] -- extract infor -- [/bold dodger_blue2]
+        :robot_face: :detective:"""
+    )
     extract_infor()
 
     print("[bold green]DONE![/bold green] :nerd_face:")

@@ -55,8 +55,8 @@ def web_scraping(
 
     # update data in file default
     if auto_mode:
-        amount_of_pages = [web_scraping["link_page"].count()]
-        update_default(amount_of_pages, search_range, "scraping")
+        length_of_pages = [web_scraping["link_page"].count()]
+        update_default(length_of_pages, search_range, "scraping")
         print("Updated dafault data.")
 
     # Export Dataframe in csv
@@ -172,7 +172,7 @@ def extract_infor(
                 list_name, list_birth_date, number_of_pages = extract_text_pdf(
                     file=file_pdf
                 )
-                
+
                 if len(list_name) != len(list_birth_date):
                     print(f"Alert! file: {file_pdf}")
 
@@ -212,7 +212,9 @@ def extract_infor(
 
     data_extract = pd.DataFrame(data)
 
-    print(f"\nExtracted: {pages} PDF pages, {data_extract['name'].count()} names.")
+    print(
+        f"\nExtracted: {pages} PDF pages, {data_extract['name'].count()} names"
+    )
 
     # update data in file default
     if auto_mode and path_automode:

@@ -108,26 +108,26 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     sleep(2)
 
-    # Check amount pages
+    # Check length pages
 
-    amount_search = browser.find_elements(By.CLASS_NAME, "OSFillParent")
+    length_search = browser.find_elements(By.CLASS_NAME, "OSFillParent")
 
-    amount_search_number = (
-        amount_search[13] if len(amount_search) > 13 else amount_search[10]
+    length_search_number = (
+        length_search[13] if len(length_search) > 13 else length_search[10]
     )
-    amount_search_number = amount_search_number.text.split(" ")[0]
-    amount_search_number = int(amount_search_number)    
+    length_search_number = length_search_number.text.split(" ")[0]
+    length_search_number = int(length_search_number)
 
     # Check result search
-    if amount_search_number == 0:
+    if length_search_number == 0:
         print("[bold red]No information found for scraping![/bold red]")
         browser.quit()
         return data
 
-    total_pages = math.ceil(amount_search_number / 25)
+    total_pages = math.ceil(length_search_number / 25)
 
     # Expand results 200 [disabled]
-    # if amount_search_number > 25:
+    # if length_search_number > 25:
     #     print("expandir lista")
     #     expand_list = browser.find_element(
     #         By.XPATH,
@@ -145,10 +145,10 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
     # Navigate between the pages
     i = total_pages  # initial countdown
-    x = 0 # initial count get items
-    p = 0 # initial count pages in for
-    
-    print(f"Found {amount_search_number} items in {total_pages} pages.")
+    x = 0  # initial count get items
+    p = 0  # initial count pages in for
+
+    print(f"Found {length_search_number} items in {total_pages} pages.")
 
     for page in range(total_pages):
         body_results = browser.find_element(
@@ -161,11 +161,14 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         p += 1
 
         # Collects links from the current page
-        print(f"Digging data (description - link page - name pdf) in page {p}/{total_pages}")
+        print(
+            f"""Digging data (description - link page - name pdf)
+            in page {p}/{total_pages}
+            """
+        )
         with typer.progressbar(
             list_href_page, label="Collecting "
         ) as list_href_page:
-            
             for item_href in list_href_page:
                 link_page = item_href.get_attribute(
                     "href"
@@ -192,7 +195,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
             sleep(2)
 
     # Extract link PDF
-    total = amount_search_number
+    total = length_search_number
     print("Digging data (link pdf)")
     with typer.progressbar(data["link_page"], label="Collecting ") as progress:
         for link in progress:

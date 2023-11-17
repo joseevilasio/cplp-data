@@ -33,7 +33,6 @@ def remove_space_between_digit(text: str) -> str:
     text_compile = []
 
     for character in text:
-
         if (length - 1) == i:
             pass
         elif character == " " and text[i - 1] in numbers:
@@ -94,7 +93,7 @@ def automode(phase: str) -> list:
     default = pd.read_csv("./app/log/default.csv", sep=";")
 
     for index in range(len(default)):
-        if default.amount_of_pages[index] <= 0 and phase == "scraping":
+        if default.length_of_pages[index] <= 0 and phase == "scraping":
             search_range = default.search_range[index].split("]-[")
             date_start = search_range[0].replace("[", "")
             date_end = search_range[1].replace("]", "")
@@ -140,13 +139,13 @@ def update_default(data: list, range: str, phase: str):
     row = df.index[df.eq(range).any(axis=1)].values[0]
 
     if phase == "scraping":
-        df.at[row, "amount_of_pages"] = data[0]
+        df.at[row, "length_of_pages"] = data[0]
 
     elif phase == "get_pdf":
         df.at[row, "download_of_pdf"] = data[0]
 
     elif phase == "extract":
         df.at[row, "pdf_pages_extracted"] = data[0]
-        df.at[row, "amount_of_name_extracted"] = data[1]
+        df.at[row, "length_of_name_extracted"] = data[1]
 
     df.to_csv("./app/log/default.csv", sep=";", index=False)
