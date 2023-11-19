@@ -50,7 +50,12 @@ def remove_space_between_digit(text: str) -> str:
 def if_age_is_valid(date: str) -> bool:
     """Comparing dates to check if you are of legal age"""
 
-    converted_date = datetime.strptime(date, "%d/%m/%Y").date()
+    try:
+        converted_date = datetime.strptime(date, "%d/%m/%Y").date()
+    except:
+        print(f"Not added. Error with date -> '{date}'")
+        return False
+
     today = datetime.now().strftime("%d/%m/%Y")
     converted__today = datetime.strptime(today, "%d/%m/%Y").date()
 

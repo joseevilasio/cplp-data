@@ -3,7 +3,7 @@ import re
 from PyPDF2 import PdfReader
 from rich import print
 
-from app.utils import if_age_is_valid, remove_space_between_digit
+from app.utils import remove_space_between_digit
 
 
 def extract_text_pdf(file: str, verbose: bool = False) -> list:
@@ -14,10 +14,14 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
 
     pattern_date = r"(\d{1,2}\s?\d{0,1}\s?/\s?\d{2}\s?/\s?\d{4})"
     pattern_name = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$"
-    pattern_split = r"data\s*d[et]?\s*nascimento|datade\s*nascimento|data\s*nascimento"
+    pattern_split = (
+        r"data\s*d[et]?\s*nascimento|datade\s*nascimento|data\s*nascimento"
+    )
 
     name = []
     birth_date = []
+    index_name = -1
+    index_birth = -1
 
     for number in range(number_of_pages):
         page = reader.pages[number]
@@ -51,20 +55,27 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
             if verbose:
                 print(f"[blue]{list_infor_split}[/blue]\n")
                 print(
-                    f"[bold]Extract start-> pg:{number + 1} path:{file}[/bold]"
+                    f"""[bold]Extract start-> pg:{number + 1}
+                        path:{file}[/bold]"""
                 )
 
             for item in list_infor_split:
-                if re.search(pattern_name, item.replace("/", "")):
+                if (
+                    re.search(pattern_name, item.replace("/", ""))
+                    and item.replace(" ", "") != ""
+                ):
                     name.append(item.strip().replace("/", "-"))
+                    index_name += 1
                     if verbose:
                         print(
                             f"Name: {item.strip().replace('/','-')} --- ",
                             end="",
                         )
-                elif re.search(pattern_date, item) and if_age_is_valid(item):
-                    birth_date.append(item)
-                    if verbose:
-                        print(f"Date: {item}")
+                elif re.search(pattern_date, item):
+                    if (index_birth + 1) == index_name:
+                        birth_date.append(item)
+                        index_birth += 1
+                        if verbose:
+                            print(f"Date: {item}")
 
     return [name, birth_date, number_of_pages]

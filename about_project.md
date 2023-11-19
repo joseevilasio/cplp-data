@@ -19,11 +19,18 @@ ATENÇÃO: Tratar os arquivos listados abaixo separados para consolidação de d
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4757-2023_dr_78-2023.pdf - (Hugo Martins) com data de nascimento incorreta 5 digitos em ano
 despacho_10384-2022_dr_164-2022.pdf (Melquizedeque dos Santos Martins ) data com mês incorreto 18
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_8752-2021_dr_172-2021.pdf erro ao extrair dados bruto, verificar
-/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_7729-2020_dr_152-2020.pdf (Maicon Sarte Miranda), data de nascimento 2019
-/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4833-2019_dr_92-2019.pdf (Raquel da Cunha Carboni Farias)  data de nascimento 2019
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_7729-2020_dr_152-2020.pdf (Maicon Sarte Miranda), data de nascimento ano 2019
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4833-2019_dr_92-2019.pdf (Raquel da Cunha Carboni Farias)  data de nascimento ano 2019
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_1295-2020_dr_20-2020.pdf  Maria Liziane Pinto de Macêdo e Jaine com data sem /
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_812-2018_dr_14-2018.pdf Mariana Silva Carvalho data de nascimento ano 2017
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_8051-2017_dr_179-2017.pdf Silvanda Prudente de Almeida data de nascimento sem /
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_8050-2017_dr_179-2017.pdf Silvanda Prudente de Almeida data de nascimento sem /
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11835-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11834-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11833-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
 
-Arquivos de 2019 com padrão diferente dos demais.
+
+Arquivos de 2019 com padrão diferente dos demais. [corrigido]
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_6030-2019_dr_123-2019.pdf (Palavras chaves Nascimento aparecendo muitas vezes)
 
 
