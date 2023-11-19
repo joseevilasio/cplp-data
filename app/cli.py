@@ -99,6 +99,9 @@ def report():
     for row in default_dict:
         table.add_row(*[str(value) for value in row.values()])
 
+    x, *total = default.sum().to_list()
+    table.add_row("Total", *[str(value) for value in total])
+
     Console().print(table)
 
 
