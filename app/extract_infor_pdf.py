@@ -12,7 +12,7 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
     reader = PdfReader(file)  # instance
     number_of_pages = len(reader.pages)
 
-    pattern_date = r"(\d{1,2}\s?\d{0,1}\s?/\s?\d{2}\s?/\s?\d{4})"
+    pattern_date = r"(\d{1,2}\s?\d{0,1}\s?/\s?\d{2}\s?/\s?\d{2,4})"
     pattern_name = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$"
     pattern_split = (
         r"data\s*d[et]?\s*nascimento|datade\s*nascimento|data\s*nascimento"
