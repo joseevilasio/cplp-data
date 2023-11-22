@@ -28,10 +28,13 @@ despacho_10384-2022_dr_164-2022.pdf (Melquizedeque dos Santos Martins ) data com
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11835-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11834-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_11833-2016_dr_191-2016.pdf Laís Sena dos Santos data de nascimento sem /
-
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4598-2016_dr_65-2016.pdf Paulo Henrique Roxo data de nascimento ano 2016
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4597-2016_dr_65-2016.pdf Paulo Henrique Roxo data de nascimento ano 2016
+/home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_4596-2016_dr_65-2016.pdf Paulo Henrique Roxo data de nascimento ano 2016
 
 Arquivos de 2019 com padrão diferente dos demais. [corrigido]
 /home/josejunior/cplp-data/app/../assets/raw_data//pdf/despacho_6030-2019_dr_123-2019.pdf (Palavras chaves Nascimento aparecendo muitas vezes)
+
 
 
 ## TODO:
