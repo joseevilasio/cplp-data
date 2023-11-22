@@ -11,6 +11,7 @@ ROOT_PATH: str = os.path.dirname(__file__)
 LOG_PATH: str = os.path.join(ROOT_PATH, "/log/")
 RAW_PATH: str = os.path.join(ROOT_PATH, "..", "assets/raw_data/")
 PROCESSED_PATH: str = os.path.join(ROOT_PATH, "..", "assets/processed_data/")
+MERGE: str = os.path.join(ROOT_PATH, "..", "assets/merge/")
 
 
 def create_pdf_name(text: str) -> str:
