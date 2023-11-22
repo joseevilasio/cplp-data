@@ -9,6 +9,7 @@ from app.extract_infor_pdf import extract_text_pdf
 from app.utils import (
     PROCESSED_PATH,
     RAW_PATH,
+    MERGE,
     automode,
     download_pdf,
     update_default,
@@ -229,3 +230,20 @@ def extract_infor(
     print(f"Data saved in '{file_path_}'")
 
     return file_path_
+
+
+def merge_all(path: str):
+    """Merge all files in path"""
+
+    files = os.listdir(PROCESSED_PATH)
+    df_list = []
+
+    for file in files:
+
+        df = pd.read_csv("".join([PROCESSED_PATH, file]), sep=";")
+        df_list.append(df)
+    
+    merge = pd.concat([*df_list], join="inner")
+    merge.to_csv("".join([MERGE, "merge.csv"]), sep=";", index=False)
+
+    print(f"Data saved in '{MERGE}/merge.csv'")
