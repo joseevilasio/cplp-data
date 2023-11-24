@@ -13,6 +13,9 @@ packages = [
 cplpdata = "app.cli:app"
 
 
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.27.0"
+
 [tool.flake8]
 exclude = [".venv", "build", ".vscodelocal", "migrations", "./test.py"]
 max-line-length = 79
