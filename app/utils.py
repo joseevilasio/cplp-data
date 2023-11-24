@@ -155,3 +155,7 @@ def update_default(data: list, range: str, phase: str):
         df.at[row, "length_of_name_extracted"] = data[1]
 
     df.to_csv("./app/log/default.csv", sep=";", index=False)
+
+
+
+    

@@ -7,10 +7,18 @@ from rich.console import Console
 from rich.table import Table
 from typing_extensions import Annotated
 
-from app.controller import extract_infor, get_pdf, web_scraping
+from app.controller import extract_infor, get_pdf, web_scraping, merge_all
+from app.utils import PROCESSED_PATH
 
 app = typer.Typer(name="CPLP DATA CLI", add_completion=False)
 
+
+@app.command()
+def merge():
+    """Merge all files"""
+
+    merge_all(PROCESSED_PATH)
+    
 
 @app.command()
 def start_web_scraping(
