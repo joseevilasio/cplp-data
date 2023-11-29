@@ -153,6 +153,7 @@ def extract_infor(
         "name": [],
         "birth_date": [],
         "extract_complete": [],
+        "published": [],        
     }
 
     pages = 0
@@ -160,6 +161,7 @@ def extract_infor(
 
     print(f"Found {length} PDFs for extract")
     print("Extracting (name, birth date)")
+
     with typer.progressbar(length=length, label="Extracting ") as progress:
         for index in progress:
             name_pdf = path_pdf_to_extract.name_pdf[index]
@@ -168,6 +170,7 @@ def extract_infor(
             description = path_pdf_to_extract.description[index]
             link_page = path_pdf_to_extract.link_page[index]
             search_range = path_pdf_to_extract.search_range[index]
+            published = path_pdf_to_extract.published[index]
 
             if exist_file:
                 list_name, list_birth_date, number_of_pages = extract_text_pdf(
@@ -200,6 +203,10 @@ def extract_infor(
                     data["search_range"].append(search_range)
                     for x in range(len(list_name))
                 ]
+                [
+                    data["published"].append(published)
+                    for x in range(len(list_name))
+                ]
 
             else:
                 print(f"File no exist -> {file_pdf}")
@@ -210,6 +217,7 @@ def extract_infor(
                 data["description"].append(description)
                 data["link_page"].append(link_page)
                 data["search_range"].append(search_range)
+                data["published"].append(published)
 
     data_extract = pd.DataFrame(data)
 
@@ -239,7 +247,6 @@ def merge_all(path: str):
     df_list = []
 
     for file in files:
-
         df = pd.read_csv("".join([PROCESSED_PATH, file]), sep=";")
         df_list.append(df)
     

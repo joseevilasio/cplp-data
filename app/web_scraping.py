@@ -26,6 +26,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         "link_page": [],  # link page 'despacho'
         "link_pdf": [],  # link page file download
         "name_pdf": [],  # name pdf file
+        "published": [], # published date
     }
 
     # Config webdriver
@@ -182,6 +183,11 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
                 data["description"].append(text_page)
                 data["link_page"].append(link_page)
                 data["name_pdf"].append(name_pdf)
+
+                length = len(text_page)
+                index_start = length - 10
+                data["published"] = text_page[index_start:]
+
                 x += 1
 
             print(f"\nCollected {x} items")
