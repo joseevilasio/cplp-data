@@ -208,7 +208,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
             # Get link page 'despacho'
             browser.get(f"{link}")
 
-            sleep(3)
+            sleep(2)
 
             list_elements_page_download = browser.find_elements(
                 By.CLASS_NAME, "ThemeGrid_MarginGutter"
