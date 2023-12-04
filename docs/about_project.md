@@ -28,6 +28,8 @@ O tratamento inicial na string é remover as quebras de linhas e retirar alguns 
 Formato de datas encontradas: ['dd/mm/aaaa', 'd d/mm/aaaa', 'dd /mm/aaaa', 'dd/mm//aaaa', 'dd/mm/ aaaa','dd-mm-aaaa', 'dd-mm-aa', 'dd-mmaaaa']
 Formato de nomes encontrados: ['Jose Da`Silva', 'Jose Da-silva']
 
+Utilizado pandas para criar dataframes e salvar os arquivos em csv e outros momentos para acessar esses csv e manipular algumas informações nas funções. 
+
 ***
 **NOTA:** Alguns arquivos listados abaixo ainda não tive êxito no tratamento dentro pipeline do app.
 
