@@ -34,7 +34,7 @@ Utilizado as seguintes ferramentas:
 - Typer
 ```
 
-Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, [veja aqui!](about_project.md)
+Informações mais detalhadas sobre implementação, a utilização da tecnologias e dificuldades encontradas, [veja aqui!](https://github.com/joseevilasio/cplp-data/blob/main/docs/about_project.md)
 
 ### 📋 Pré-requisitos
 
