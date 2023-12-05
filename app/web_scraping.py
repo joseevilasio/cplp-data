@@ -186,7 +186,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
 
                 length = len(text_page)
                 index_start = length - 10
-                data["published"] = text_page[index_start:]
+                data["published"].append(text_page[index_start:])
 
                 x += 1
 
