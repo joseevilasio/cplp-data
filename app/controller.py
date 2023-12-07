@@ -240,17 +240,17 @@ def extract_infor(
     return file_path_
 
 
-def merge_all(path: str):
+def merge_all(path: str, filename: str):
     """Merge all files in path"""
 
-    files = os.listdir(PROCESSED_PATH)
+    files = os.listdir(path)
     df_list = []
 
     for file in files:
-        df = pd.read_csv("".join([PROCESSED_PATH, file]), sep=";")
+        df = pd.read_csv("".join([path, file]), sep=";")
         df_list.append(df)
     
-    merge = pd.concat([*df_list], join="inner")
-    merge.to_csv("".join([MERGE, "merge.csv"]), sep=";", index=False)
+    merge = pd.concat([*df_list], join="inner")    
+    merge.to_csv("".join([MERGE, f"{filename}.csv"]), sep=";", index=False)
 
-    print(f"Data saved in '{MERGE}/merge.csv'")
+    print(f"Data saved in '{MERGE}/{filename}.csv'")

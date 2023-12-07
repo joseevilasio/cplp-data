@@ -66,15 +66,23 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
                 ):
                     name.append(item.strip().replace("/", "-"))
                     index_name += 1
+                    
                     if verbose:
                         print(
                             f"Name: {item.strip().replace('/','-')} --- ",
                             end="",
                         )
+
                 elif re.search(pattern_date, item):
+                    # Ensures that there is name in the same position
                     if (index_birth + 1) == index_name:
+                        
+                        #TODO: Validar data e inserir com as correções
+                        #re.search(pattern_date_2)
+
                         birth_date.append(item)
                         index_birth += 1
+
                         if verbose:
                             print(f"Date: {item}")
 

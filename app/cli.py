@@ -17,7 +17,7 @@ app = typer.Typer(name="CPLP DATA CLI", add_completion=False)
 def merge():
     """Merge all files"""
 
-    merge_all(PROCESSED_PATH)
+    merge_all(PROCESSED_PATH, "merge_processed_data")
     
 
 @app.command()
