@@ -13,6 +13,7 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
     number_of_pages = len(reader.pages)
 
     pattern_date = r"(\d{1,2}\s?\d{0,1}\s?/\s?\d{2}\s?/\s?\d{2,4})"
+    pattern_date_wrong = r"(\/\d{6})"
     pattern_name = r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s]+$"
     pattern_split = (
         r"data\s*d[et]?\s*nascimento|datade\s*nascimento|data\s*nascimento"
@@ -35,7 +36,33 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
             .replace(" ‘ ", "")
             .replace("Nome", "")
             .replace("nome", "")
-        )  # remove line break and symbol dot
+        )  # remove line break, symbol and dot
+
+        if verbose:
+            print(f"[white]{text}[/white]")
+
+        # replace date wrong without '/'
+
+        dates_for_replace = re.finditer(pattern_date_wrong, text)
+
+        index_update = 0
+
+        for item in dates_for_replace:
+            index_start = item.start() + index_update
+            index_end = item.end() + index_update
+            item_string = text[index_start:index_end]
+
+            new_item = "".join(
+                [
+                    text[index_start:index_start + 3],
+                    "/",
+                    text[index_start + 3:index_end],
+                ]
+            )
+
+            text = text.replace(item_string, new_item)
+
+            index_update += 1
 
         list_text = re.split(
             pattern_split, text, flags=re.IGNORECASE
@@ -66,7 +93,7 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
                 ):
                     name.append(item.strip().replace("/", "-"))
                     index_name += 1
-                    
+
                     if verbose:
                         print(
                             f"Name: {item.strip().replace('/','-')} --- ",
@@ -76,9 +103,8 @@ def extract_text_pdf(file: str, verbose: bool = False) -> list:
                 elif re.search(pattern_date, item):
                     # Ensures that there is name in the same position
                     if (index_birth + 1) == index_name:
-                        
-                        #TODO: Validar data e inserir com as correções
-                        #re.search(pattern_date_2)
+                        # TODO: Validar data e inserir com as correções
+                        # re.search(pattern_date_2)
 
                         birth_date.append(item)
                         index_birth += 1
