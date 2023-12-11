@@ -7,9 +7,9 @@ import typer
 
 from app.extract_infor_pdf import extract_text_pdf
 from app.utils import (
+    MERGE,
     PROCESSED_PATH,
     RAW_PATH,
-    MERGE,
     automode,
     download_pdf,
     update_default,
@@ -153,7 +153,7 @@ def extract_infor(
         "name": [],
         "birth_date": [],
         "extract_complete": [],
-        "published": [],        
+        "published": [],
     }
 
     pages = 0
@@ -249,8 +249,8 @@ def merge_all(path: str, filename: str):
     for file in files:
         df = pd.read_csv("".join([path, file]), sep=";")
         df_list.append(df)
-    
-    merge = pd.concat([*df_list], join="inner")    
+
+    merge = pd.concat([*df_list], join="inner")
     merge.to_csv("".join([MERGE, f"{filename}.csv"]), sep=";", index=False)
 
     print(f"Data saved in '{MERGE}/{filename}.csv'")

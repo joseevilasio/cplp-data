@@ -26,7 +26,7 @@ def extract_data_from_search_page(date_start: str, date_end: str) -> dict:
         "link_page": [],  # link page 'despacho'
         "link_pdf": [],  # link page file download
         "name_pdf": [],  # name pdf file
-        "published": [], # published date
+        "published": [],  # published date
     }
 
     # Config webdriver
