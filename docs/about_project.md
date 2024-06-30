@@ -33,5 +33,10 @@ Utilizado pandas para criar dataframes e salvar os arquivos em csv e outros mome
 ***
 **NOTA:** Alguns arquivos listados abaixo ainda não tive êxito no tratamento dentro pipeline do app.
 
+Despacho n.º 1295/2020 - Diário da República n.º 20/2020, Série II de 2020-01-29
+
+contém datas sem /, acaba que temos linha posterior sendo suprimida
+
+path = /home/josejunior/cplp-data/assets/raw_data/pdf/despacho_1295-2020_dr_20-2020.pdf
 
 ***
